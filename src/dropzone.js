@@ -1,7 +1,8 @@
+//import {Table} from '../../vpx-toolbox/dist/lib/vpt/table';
+
 export class DropZone {
 
 	static dropHandler(ev) {
-		let i;
 		console.log('File(s) dropped', ev);
 
 		if (ev.dataTransfer.items) {
@@ -21,6 +22,12 @@ export class DropZone {
 		}
 		ev.target.classList.remove('bg-warning');
 		ev.preventDefault();
+	}
+
+	static loadVpx(file) {
+		// Table.loadBlob(file).then(table => {
+		// 	console.log('Table loaded: ', table);
+		// })
 	}
 
 	static dragEnterHandler(ev) {

@@ -44,5 +44,9 @@ module.exports = () => {
 			hashDigestLength: 12,
 		},
 		devtool: 'source-map',
+		node: {
+			fs: 'empty',
+			child_process: 'empty',
+		},
 	};
 };
