@@ -1,5 +1,4 @@
 const { resolve } = require('path');
-const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = () => {
@@ -12,10 +11,7 @@ module.exports = () => {
 			new HtmlWebpackPlugin({
 				template: 'src/index.html',
 				minify: true,
-			}),
-			new CopyPlugin([
-				{ from: 'node_modules/dropzone/dist/min', to: 'assets/plugins/dropzone' },
-			]),
+			})
 		],
 		module: {
 			rules: [

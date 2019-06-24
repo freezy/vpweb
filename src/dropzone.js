@@ -6,17 +6,17 @@ export class DropZone {
 
 		if (ev.dataTransfer.items) {
 			// Use DataTransferItemList interface to access the file(s)
-			for (i = 0; i < ev.dataTransfer.items.length; i++) {
+			for (const item of ev.dataTransfer.items) {
 				// If dropped items aren't files, reject them
-				if (ev.dataTransfer.items[i].kind === 'file') {
-					const file = ev.dataTransfer.items[i].getAsFile();
-					console.log('... file[' + i + '].name = ' + file.name);
+				if (item.kind === 'file') {
+					const file = item.getAsFile();
+					console.log('item name = ' + file.name);
 				}
 			}
 		} else {
 			// Use DataTransfer interface to access the file(s)
-			for (i = 0; i < ev.dataTransfer.files.length; i++) {
-				console.log('... file[' + i + '].name = ' + ev.dataTransfer.files[i].name);
+			for (const file of ev.dataTransfer.files) {
+				console.log('file name = ' + file.name);
 			}
 		}
 		ev.target.classList.remove('bg-warning');
