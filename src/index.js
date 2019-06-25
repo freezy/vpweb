@@ -1,4 +1,10 @@
 import './index.sass';
-import {DropZone} from './dropzone';
+import { Loader } from './loader';
+import { FileCache } from './file-cache';
 
-window.DropZone = DropZone;
+const cache = new FileCache();
+cache.init();
+window.loader = new Loader(cache);
+
+
+
