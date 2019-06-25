@@ -30,6 +30,29 @@ export class DropZone {
 	static loadVpx(file) {
 		Table.load(new BrowserBinaryReader(file)).then(table => {
 			console.log('Table loaded: ', table);
+			table.exportScene({
+				applyMaterials: false,
+				applyTextures: false,
+				optimizeTextures: false,
+				exportPlayfield: true,
+				exportPrimitives: true,
+				exportRubbers: true,
+				exportSurfaces: true,
+				exportFlippers: true,
+				exportBumpers: true,
+				exportRamps: true,
+				exportPlayfieldLights: true,
+				exportLightBulbs: true,
+				exportLightBulbLights: true,
+				exportHitTargets: true,
+				exportGates: true,
+				exportKickers: true,
+				exportTriggers: true,
+				exportSpinners: true,
+				gltfOptions: { compressVertices: false, forcePowerOfTwoTextures: false },
+			}).then(scene => {
+				console.log('Scene created:', scene);
+			});
 		});
 	}
 
