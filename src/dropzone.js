@@ -1,4 +1,5 @@
-//import {Table} from '../../vpx-toolbox/dist/lib/vpt/table';
+import {Table} from '../../vpx-toolbox/dist/lib/vpt/table';
+import {BrowserBinaryReader} from '../../vpx-toolbox/dist/lib/io/binary-reader.browser';
 
 export class DropZone {
 
@@ -12,12 +13,14 @@ export class DropZone {
 				if (item.kind === 'file') {
 					const file = item.getAsFile();
 					console.log('item name = ' + file.name);
+					DropZone.loadVpx(file);
 				}
 			}
 		} else {
 			// Use DataTransfer interface to access the file(s)
 			for (const file of ev.dataTransfer.files) {
 				console.log('file name = ' + file.name);
+				DropZone.loadVpx(file);
 			}
 		}
 		ev.target.classList.remove('bg-warning');
@@ -25,9 +28,9 @@ export class DropZone {
 	}
 
 	static loadVpx(file) {
-		// Table.loadBlob(file).then(table => {
-		// 	console.log('Table loaded: ', table);
-		// })
+		Table.load(new BrowserBinaryReader(file)).then(table => {
+			console.log('Table loaded: ', table);
+		});
 	}
 
 	static dragEnterHandler(ev) {
