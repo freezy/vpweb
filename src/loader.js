@@ -1,6 +1,7 @@
 import {Table} from '../../vpx-toolbox/dist/lib/vpt/table';
 import {BrowserBinaryReader} from '../../vpx-toolbox/dist/lib/io/binary-reader.browser';
 
+import Worker from 'worker-loader!./physics.worker.js';
 import {Renderer} from './renderer';
 
 export class Loader {
@@ -46,6 +47,7 @@ export class Loader {
 			this.renderer.animate();
 		}
 		this.renderer.setPlayfield(scene.children[0]);
+		this.physicsWorker = new Worker();
 	}
 
 	dropHandler(ev) {
