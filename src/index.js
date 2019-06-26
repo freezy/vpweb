@@ -3,8 +3,15 @@ import { Loader } from './loader';
 import { FileCache } from './file-cache';
 
 const cache = new FileCache();
-cache.init();
-window.loader = new Loader(cache);
+const loader = new Loader(cache);
+cache.init()
+	.then(() => cache.get())
+	.then(cachedVpx => {
+		if (cachedVpx) {
+			return loader.loadVpx(cachedVpx);
+		}
+	});
+window.loader = loader;
 
 
 
