@@ -7,13 +7,14 @@ export class Loader {
 
 	constructor(cache) {
 		this.cache = cache;
+		this.dropzone = document.getElementById('dropzone');
 	}
 
 	async loadVpx(file) {
 		const table = await Table.load(new BrowserBinaryReader(file));
 		const now = Date.now();
 		const scene = await table.exportScene({
-			applyMaterials: false,
+			applyMaterials: true,
 			applyTextures: false,
 			optimizeTextures: false,
 			exportPlayfieldLights: true,
@@ -68,17 +69,17 @@ export class Loader {
 				this.loadVpx(file).then(this.onVpxLoaded.bind(this));
 			}
 		}
-		ev.target.classList.remove('bg-warning');
+		this.dropzone.classList.remove('bg-dropzone-hover');
 		ev.preventDefault();
 	}
 
 	dragEnterHandler(ev) {
-		ev.target.classList.add('bg-warning');
+		this.dropzone.classList.add('bg-dropzone-hover');
 		ev.preventDefault();
 	}
 
 	dragLeaveHandler(ev) {
-		ev.target.classList.remove('bg-warning');
+		this.dropzone.classList.remove('bg-dropzone-hover');
 		ev.preventDefault();
 	}
 
