@@ -3,6 +3,10 @@
 	"version": "1.0.0",
 	"description": "Visual Pinball in the browser",
 	"main": "src/index.js",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/freezy/vpweb"
+	},
 	"scripts": {
 		"start:dev": "webpack-dev-server --inline --progress"
 	},
