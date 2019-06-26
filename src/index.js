@@ -8,7 +8,7 @@ cache.init()
 	.then(() => cache.get())
 	.then(cachedVpx => {
 		if (cachedVpx) {
-			return loader.loadVpx(cachedVpx);
+			loader.loadVpx(cachedVpx).then(loader.onVpxLoaded.bind(loader));
 		}
 	});
 window.loader = loader;
