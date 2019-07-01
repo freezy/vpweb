@@ -1,8 +1,8 @@
 import {Table} from '../../vpx-toolbox/dist/lib/vpt/table';
 import {BrowserBinaryReader} from '../../vpx-toolbox/dist/lib/io/binary-reader.browser';
 
-import Worker from 'worker-loader!./physics.worker.js';
 import {Renderer} from './renderer';
+import {Physics} from './physics';
 
 export class Loader {
 
@@ -34,20 +34,23 @@ export class Loader {
 			exportKickers: true,
 			exportTriggers: true,
 			exportSpinners: true,
-			gltfOptions: { compressVertices: false, forcePowerOfTwoTextures: false },
+			gltfOptions: {compressVertices: false, forcePowerOfTwoTextures: false},
 		});
 		console.log('Scene created in %sms.', Date.now() - now, table, scene);
 		return scene;
 	}
 
 	onVpxLoaded(scene) {
+		if (!scene) {
+			return;
+		}
 		if (!this.renderer) {
 			this.renderer = new Renderer(scene);
 			this.renderer.init();
 			this.renderer.animate();
 		}
 		this.renderer.setPlayfield(scene.children[0]);
-		this.physicsWorker = new Worker();
+		this.physics = new Physics(this.renderer.scene);
 	}
 
 	dropHandler(ev) {
