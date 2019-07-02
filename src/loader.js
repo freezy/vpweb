@@ -13,6 +13,10 @@ export class Loader {
 
 	async loadVpx(file) {
 		const table = await Table.load(new BrowserBinaryReader(file));
+		return table;
+	}
+
+	async createScene(table) {
 		const now = Date.now();
 		const scene = await table.exportScene({
 			applyMaterials: true,
@@ -40,17 +44,19 @@ export class Loader {
 		return scene;
 	}
 
-	onVpxLoaded(scene) {
-		if (!scene) {
+	onVpxLoaded(table) {
+		if (!table) {
 			return;
 		}
-		if (!this.renderer) {
-			this.renderer = new Renderer(scene);
-			this.renderer.init();
-			this.renderer.animate();
-		}
-		this.renderer.setPlayfield(scene.children[0]);
-		this.physics = new Physics(this.renderer.scene);
+		this.createScene(table).then(scene => {
+			if (!this.renderer) {
+				this.renderer = new Renderer(scene);
+				this.renderer.init();
+				this.renderer.animate();
+			}
+			this.renderer.setPlayfield(scene.children[0]);
+			this.physics = new Physics(table, this.renderer.scene);
+		});
 	}
 
 	dropHandler(ev) {
@@ -63,14 +69,12 @@ export class Loader {
 				if (item.kind === 'file') {
 					const file = item.getAsFile();
 					this.cache.save(file);
-					const now = Date.now();
 					this.loadVpx(file).then(this.onVpxLoaded.bind(this));
 				}
 			}
 		} else {
 			// Use DataTransfer interface to access the file(s)
 			for (const file of ev.dataTransfer.files) {
-				const now = Date.now();
 				this.loadVpx(file).then(this.onVpxLoaded.bind(this));
 			}
 		}
