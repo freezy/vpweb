@@ -6,12 +6,12 @@ let table = null;
 
 setInterval(() => {
 	if (table) {
-		angle = (angle + 15) % 360;
-		const matrix = table.flippers.LeftFlipper.getMatrix(angle);
+		angle = 5; //(angle + 15) % 360;
+		const matrix = table.flippers.LeftFlipper.getDynamicMatrix(angle);
 		postMessage({ LeftFlipper: matrix.getElements() });
 	}
 
-}, 1000);
+}, 200);
 
 onmessage = e => {
 	if (e.data.table) {
