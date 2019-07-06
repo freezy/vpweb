@@ -6,7 +6,7 @@ class PhysicsWorker {
 
 	constructor() {
 		this.fps = 60;
-		this.numIterations = 2; // 2 iterations => 120 iterations / s
+		this.numIterations = 16; // 4 iterations => 240 iterations / s
 
 		this._timePerFrame = 1000 / this.fps; // 16.6ms per frame
 		this._timePerIteration = this._timePerFrame / this.numIterations;
@@ -21,7 +21,7 @@ class PhysicsWorker {
 			throw new Error('Physics loop already started!');
 		}
 		console.log('[worker] Starting physics loop...');
-		this._lastTime = performance.now() - this._timePerIteration;
+		this._lastTime = performance.now();
 		this._interval = setInterval(this._loop.bind(this), this._timePerFrame);
 	}
 
@@ -33,19 +33,18 @@ class PhysicsWorker {
 	}
 
 	_loop() {
-		let time = performance.now();
-		let dtime = time - this._lastTime;
+		const now = performance.now();
+		let dtime = now - this._lastTime - (this.numIterations - 1) * this._timePerIteration;
+		this._lastTime = now;
 		for (let i = 0; i < this.numIterations; i++) {
 			this._process(dtime);
-			time += this._timePerIteration;
 			dtime = this._timePerIteration;
 		}
-		this._lastTime = time;
 		this._popState();
 	}
 
 	_process(dtime) {
-		this._angle = (this._angle + 1) % 360;
+		this._angle = (this._angle + 360 * dtime / 1000) % 360;
 		this._state.LeftFlipper = new FlipperState(this._angle);
 	}
 
