@@ -13,7 +13,6 @@ export class Physics {
 	}
 
 	_onMessage(e) {
-
 		if (e.data.state) {
 			this._updateState(e.data.state);
 		}

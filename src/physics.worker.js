@@ -1,28 +1,34 @@
-import {Flipper} from '../../vpx-toolbox/dist/lib/vpt/flipper/flipper'
-import {FlipperData} from '../../vpx-toolbox/dist/lib/vpt/flipper/flipper-data'
-import {FlipperState} from '../../vpx-toolbox/dist/lib/vpt/flipper/flipper-state'
+import {Table} from '../../vpx-toolbox/dist/lib/vpt/table'
+import {Player} from '../../vpx-toolbox/dist/lib/game/player'
 
 class PhysicsWorker {
 
 	constructor() {
 		this.fps = 60;
-		this.numIterations = 16; // 4 iterations => 240 iterations / s
+		this.numIterations = 4; // 4 iterations => 240 iterations / s
 
 		this._timePerFrame = 1000 / this.fps; // 16.6ms per frame
 		this._timePerIteration = this._timePerFrame / this.numIterations;
 		this._angle = 0;
-		this._table = null;
 		this._interval = null;
 		this._state = {};
 	}
 
-	start() {
+	start(table) {
 		if (this._interval) {
 			throw new Error('Physics loop already started!');
 		}
+		this._table = table;
+		this._player = new Player(table);
+		this._player.setOnStateChanged((name, state) => this._state[name] = state);
 		console.log('[worker] Starting physics loop...');
 		this._lastTime = performance.now();
 		this._interval = setInterval(this._loop.bind(this), this._timePerFrame);
+
+		setInterval(() => {
+			this._table.flippers.LeftFlipper.rotateToEnd();
+			setTimeout(() => this._table.flippers.LeftFlipper.rotateToStart, 300);
+		}, 2000);
 	}
 
 	stop() {
@@ -36,6 +42,7 @@ class PhysicsWorker {
 		const now = performance.now();
 		let dtime = now - this._lastTime - (this.numIterations - 1) * this._timePerIteration;
 		this._lastTime = now;
+		this._player.updatePhysics();
 		for (let i = 0; i < this.numIterations; i++) {
 			this._process(dtime);
 			dtime = this._timePerIteration;
@@ -44,8 +51,9 @@ class PhysicsWorker {
 	}
 
 	_process(dtime) {
-		this._angle = (this._angle + 360 * dtime / 1000) % 360;
-		this._state.LeftFlipper = new FlipperState(this._angle);
+		this._player.physicsSimulateCycle(dtime);
+		// this._angle = (this._angle + 360 * dtime / 1000) % 360;
+		// this._state.LeftFlipper = new FlipperState(this._angle);
 	}
 
 	_popState() {
@@ -56,29 +64,11 @@ class PhysicsWorker {
 }
 
 const physicsWorker = new PhysicsWorker();
-//
-// let angle = 0;
-// let table = null;
-// let loop = false;
-//
-//
-// setInterval(() => {
-// 	if (table) {
-// 		angle = (angle + 2) % 360;
-// 		postMessage({ LeftFlipper: new FlipperState(angle) });
-// 	}
-//
-// }, 100);
 
 onmessage = e => {
-	//console.log('[worker] got message:', e);
-
 	// init
 	if (e.data.table) {
-		const table = e.data.table;
-		for (const name of Object.keys(table.flippers)) {
-			table.flippers[name] = new Flipper(name, FlipperData.fromSerialized(table.flippers[name].itemName, table.flippers[name].data));
-		}
-		physicsWorker.start();
+		const table = Table.fromSerialized(e.data.table);
+		physicsWorker.start(table);
 	}
 };
