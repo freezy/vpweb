@@ -27,7 +27,7 @@ class PhysicsWorker {
 
 		setInterval(() => {
 			this._table.flippers.LeftFlipper.rotateToEnd();
-			setTimeout(() => this._table.flippers.LeftFlipper.rotateToStart, 300);
+			//setTimeout(() => this._table.flippers.LeftFlipper.rotateToStart, 300);
 		}, 2000);
 	}
 
@@ -42,7 +42,6 @@ class PhysicsWorker {
 		const now = performance.now();
 		let dtime = now - this._lastTime - (this.numIterations - 1) * this._timePerIteration;
 		this._lastTime = now;
-		this._player.updatePhysics();
 		for (let i = 0; i < this.numIterations; i++) {
 			this._process(dtime);
 			dtime = this._timePerIteration;
@@ -51,6 +50,7 @@ class PhysicsWorker {
 	}
 
 	_process(dtime) {
+		this._player.updatePhysics();
 		this._player.physicsSimulateCycle(dtime);
 		// this._angle = (this._angle + 360 * dtime / 1000) % 360;
 		// this._state.LeftFlipper = new FlipperState(this._angle);
