@@ -33,8 +33,8 @@ export class Physics {
 		}
 	}
 
-
 	leftFlipperKeyDown() {
+		this.keyDownTime = performance.now();
 		this.worker.postMessage({event: 'leftFlipperKeyDown'});
 	}
 
@@ -43,6 +43,7 @@ export class Physics {
 	}
 
 	rightFlipperKeyDown() {
+		this.keyDownTime = performance.now();
 		this.worker.postMessage({event: 'rightFlipperKeyDown'});
 	}
 
@@ -59,15 +60,20 @@ export class Physics {
 	_updateState(state) {
 		for (const name of Object.keys(state)) {
 			if (!this.sceneItems[name]) {
-				console.warn('No scene item called %s found!', name);
+				console.warn('No scene item called %s found!', name, state[name]);
 				break;
 			}
 			if (!this.tableItems[name]) {
-				console.warn('No table item called %s found!', name);
+				console.warn('No table item called %s found!', name, state[name]);
 				break;
 			}
 
-			const itemState = FlipperState.fromSerialized(state[name]);
+			if (this.keyDownTime) {
+				console.log('Latency = %sms', performance.now() - this.keyDownTime);
+				this.keyDownTime = undefined;
+			}
+
+			const itemState = FlipperState.fromSerialized(state[name]); // todo generalize
 			const tableItem = this.tableItems[name];
 			const sceneItem = this.sceneItems[name];
 
@@ -76,6 +82,6 @@ export class Physics {
 				sceneItem.applyMatrix(matrix);
 			}
 		}
+		console.log('new state:', state);
 	}
-
 }

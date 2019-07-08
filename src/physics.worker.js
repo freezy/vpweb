@@ -5,11 +5,10 @@ class PhysicsWorker {
 
 	constructor() {
 		this.fps = 50;
-		this.numIterations = 20; // 4 iterations => 240 iterations / s
+		this.numIterations = 20; // 50*20 iterations => 1000 cycles / s
 
-		this._timePerFrame = 1000 / this.fps; // 16.6ms per frame
+		this._timePerFrame = 1000 / this.fps;
 		this._timePerIteration = this._timePerFrame / this.numIterations;
-		this._angle = 0;
 		this._interval = null;
 		this._state = {};
 	}
@@ -22,8 +21,7 @@ class PhysicsWorker {
 			throw new Error('Physics loop already started!');
 		}
 		this._table = table;
-		this._player = new Player(table);
-		this._player.setOnStateChanged((name, state) => this._state[name] = state);
+		this._player = new Player(table, (name, state) => this._state[name] = state);
 		console.log('[worker] Starting physics loop...');
 		this._lastTime = performance.now();
 		this._interval = setInterval(this._loop.bind(this), this._timePerFrame);
@@ -67,11 +65,12 @@ class PhysicsWorker {
 	_process(dtime) {
 		this._player.updatePhysics();
 		this._player.physicsSimulateCycle(dtime);
-		// this._angle = (this._angle + 360 * dtime / 1000) % 360;
-		// this._state.LeftFlipper = new FlipperState(this._angle);
 	}
 
 	_popState() {
+		if (Object.keys(this._state).length === 0) {
+			return;
+		}
 		const state = this._state;
 		this._state = {};
 		postMessage({ state });
