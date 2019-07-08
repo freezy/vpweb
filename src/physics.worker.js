@@ -4,8 +4,8 @@ import {Player} from '../../vpx-toolbox/dist/lib/game/player'
 class PhysicsWorker {
 
 	constructor() {
-		this.fps = 60;
-		this.numIterations = 4; // 4 iterations => 240 iterations / s
+		this.fps = 50;
+		this.numIterations = 20; // 4 iterations => 240 iterations / s
 
 		this._timePerFrame = 1000 / this.fps; // 16.6ms per frame
 		this._timePerIteration = this._timePerFrame / this.numIterations;
@@ -14,6 +14,9 @@ class PhysicsWorker {
 		this._state = {};
 	}
 
+	/**
+	 * @param {Table} table
+	 */
 	start(table) {
 		if (this._interval) {
 			throw new Error('Physics loop already started!');
@@ -24,11 +27,6 @@ class PhysicsWorker {
 		console.log('[worker] Starting physics loop...');
 		this._lastTime = performance.now();
 		this._interval = setInterval(this._loop.bind(this), this._timePerFrame);
-
-		setInterval(() => {
-			this._table.flippers.LeftFlipper.rotateToEnd();
-			//setTimeout(() => this._table.flippers.LeftFlipper.rotateToStart, 300);
-		}, 2000);
 	}
 
 	stop() {
@@ -36,6 +34,23 @@ class PhysicsWorker {
 			clearInterval(this._interval);
 		}
 		console.log('[worker] Physics loop stopped!');
+	}
+
+	onEvent(name) {
+		switch (name) {
+			case 'leftFlipperKeyDown':
+				this._table.flippers.LeftFlipper.rotateToEnd();
+				break;
+			case 'leftFlipperKeyUp':
+				this._table.flippers.LeftFlipper.rotateToStart();
+				break;
+			case 'rightFlipperKeyDown':
+				this._table.flippers.RightFlipper.rotateToEnd();
+				break;
+			case 'rightFlipperKeyUp':
+				this._table.flippers.RightFlipper.rotateToStart();
+				break;
+		}
 	}
 
 	_loop() {
@@ -70,5 +85,9 @@ onmessage = e => {
 	if (e.data.table) {
 		const table = Table.fromSerialized(e.data.table);
 		physicsWorker.start(table);
+	}
+
+	if (e.data.event && physicsWorker) {
+		physicsWorker.onEvent(e.data.event);
 	}
 };
