@@ -36,19 +36,23 @@ export class Physics {
 	leftFlipperKeyDown() {
 		this.keyDownTime = performance.now();
 		this.worker.postMessage({event: 'leftFlipperKeyDown'});
+		return true;
 	}
 
 	leftFlipperKeyUp() {
 		this.worker.postMessage({event: 'leftFlipperKeyUp'});
+		return true;
 	}
 
 	rightFlipperKeyDown() {
 		this.keyDownTime = performance.now();
 		this.worker.postMessage({event: 'rightFlipperKeyDown'});
+		return true;
 	}
 
 	rightFlipperKeyUp() {
 		this.worker.postMessage({event: 'rightFlipperKeyUp'});
+		return true;
 	}
 
 	_onMessage(e) {

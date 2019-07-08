@@ -8,41 +8,26 @@ export class Controller {
 		this.loader = loader;
 	}
 
-	keydown(event) {
+	key(event) {
+		//console.warn('%s %s, ctrl: %s, shift: %s', event.code, event.type, event.ctrlKey, event.shiftKey);
 		if (!this.loader.physics) {
-			return;
+			return true;
 		}
 		if (!this.physics) {
 			this.physics = this.loader.physics;
 		}
+		const down = event.type === 'keydown';
 		switch (event.code) {
-			case 'ShiftLeft':
-				this.physics.leftFlipperKeyDown();
-				break;
-			case 'ShiftRight':
-				this.physics.rightFlipperKeyDown();
-				break;
-			default:
-				break;
-		}
-	}
 
-	keyup(event) {
-		if (!this.loader.physics) {
-			return;
-		}
-		if (!this.physics) {
-			this.physics = this.loader.physics;
-		}
-		switch (event.code) {
 			case 'ShiftLeft':
-				this.physics.leftFlipperKeyUp();
-				break;
+				return down ? this.physics.leftFlipperKeyDown() : this.physics.leftFlipperKeyUp();
+
 			case 'ShiftRight':
-				this.physics.rightFlipperKeyUp();
-				break;
+				return down ? this.physics.rightFlipperKeyDown() : this.physics.rightFlipperKeyUp();
+
 			default:
 				break;
 		}
+		return false;
 	}
 }
