@@ -2,19 +2,19 @@
 export class Controller {
 
 	/**
-	 * @param {Loader} loader
+	 * @param {Renderer} renderer
 	 */
-	constructor(loader) {
-		this.loader = loader;
+	constructor(renderer) {
+		this.renderer = renderer;
 	}
 
 	key(event) {
 		//console.warn('%s %s, ctrl: %s, shift: %s', event.code, event.type, event.ctrlKey, event.shiftKey);
-		if (!this.loader.physics) {
+		if (!this.renderer.physics) {
 			return true;
 		}
 		if (!this.physics) {
-			this.physics = this.loader.physics;
+			this.physics = this.renderer.physics;
 		}
 		const down = event.type === 'keydown';
 		switch (event.code) {

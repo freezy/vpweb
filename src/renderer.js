@@ -27,6 +27,13 @@ export class Renderer {
 		this.scene.add(playfield);
 	}
 
+	/**
+	 * @param {Physics} physics
+	 */
+	setPhysics(physics) {
+		this.physics = physics;
+	}
+
 	_initScene() {
 		this.scene = window.scene = new Scene();
 		this.scene.scale.set(this.playfieldScale, this.playfieldScale, this.playfieldScale);
@@ -115,6 +122,9 @@ export class Renderer {
 	animate() {
 		requestAnimationFrame(this.animate.bind(this));
 		this.controls.update();
+		if (this.physics) {
+			this.physics.update();
+		}
 		this.stats.begin();
 		this.renderer.render(this.scene, this.camera);
 		this.stats.end();

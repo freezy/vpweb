@@ -48,14 +48,16 @@ export class Loader {
 		if (!table) {
 			return;
 		}
-		this.createScene(table).then(scene => {
+		return this.createScene(table).then(scene => {
 			if (!this.renderer) {
 				this.renderer = new Renderer(scene);
 				this.renderer.init();
 				this.renderer.animate();
 			}
 			this.renderer.setPlayfield(scene.children[0]);
-			this.physics = new Physics(table, this.renderer.scene);
+			this.renderer.setPhysics(new Physics(table, this.renderer.scene));
+
+			return this.renderer;
 		});
 	}
 

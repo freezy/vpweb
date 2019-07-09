@@ -1,5 +1,6 @@
-import Worker from 'worker-loader!./physics.worker.js';
 import {FlipperState} from '../../vpx-toolbox/dist/lib/vpt/flipper/flipper-state'
+import {Player} from '../../vpx-toolbox/dist/lib/game/player'
+import {Table} from '../../vpx-toolbox/dist/lib/vpt/table'
 
 export class Physics {
 
@@ -10,9 +11,7 @@ export class Physics {
 	constructor(table, scene) {
 		this.table = table;
 		this.scene = scene;
-		this.worker = new Worker();
-		this.worker.postMessage({ table });
-		this.worker.onmessage = this._onMessage.bind(this);
+		this._player = new Player(table);
 
 		this.sceneItems = {};
 		this.tableItems = {};
@@ -33,35 +32,37 @@ export class Physics {
 		}
 	}
 
+	update() {
+		this._player.updatePhysics();
+		this._updateState(this._player.popState())
+	}
+
 	leftFlipperKeyDown() {
 		this.keyDownTime = performance.now();
-		this.worker.postMessage({event: 'leftFlipperKeyDown'});
+		this.table.flippers.LeftFlipper.rotateToEnd();
 		return true;
 	}
 
 	leftFlipperKeyUp() {
-		this.worker.postMessage({event: 'leftFlipperKeyUp'});
+		this.table.flippers.LeftFlipper.rotateToStart();
 		return true;
 	}
 
 	rightFlipperKeyDown() {
 		this.keyDownTime = performance.now();
-		this.worker.postMessage({event: 'rightFlipperKeyDown'});
+		this.table.flippers.RightFlipper.rotateToEnd();
 		return true;
 	}
 
 	rightFlipperKeyUp() {
-		this.worker.postMessage({event: 'rightFlipperKeyUp'});
+		this.table.flippers.RightFlipper.rotateToStart();
 		return true;
 	}
 
-	_onMessage(e) {
-		if (e.data.state) {
-			this._updateState(e.data.state);
-		}
-	}
-
 	_updateState(state) {
+		if (!state) {
+			return;
+		}
 		for (const name of Object.keys(state)) {
 			if (!this.sceneItems[name]) {
 				console.warn('No scene item called %s found!', name, state[name]);
@@ -73,7 +74,8 @@ export class Physics {
 			}
 
 			if (this.keyDownTime) {
-				console.log('Latency = %sms', performance.now() - this.keyDownTime);
+				const lat = performance.now() - this.keyDownTime;
+				console.debug('[Latency] = %sms', Math.round(lat * 1000) / 1000);
 				this.keyDownTime = undefined;
 			}
 
@@ -86,6 +88,6 @@ export class Physics {
 				sceneItem.applyMatrix(matrix);
 			}
 		}
-		console.log('new state:', state);
+		//console.log('new state:', state);
 	}
 }

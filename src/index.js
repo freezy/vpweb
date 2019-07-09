@@ -5,7 +5,6 @@ import { Loader } from './loader';
 
 const cache = new FileCache();
 const loader = new Loader(cache);
-const controller = new Controller(loader);
 cache.init()
 	.then(() => cache.get())
 	.then(cachedVpx => {
@@ -13,9 +12,13 @@ cache.init()
 			return loader.loadVpx(cachedVpx);
 		}
 	})
-	.then(loader.onVpxLoaded.bind(loader));
+	.then(loader.onVpxLoaded.bind(loader))
+	.then(renderer => {
+		if (renderer) {
+			window.controller = new Controller(renderer);
+		}
+	});
 
 window.loader = loader;
-window.controller = controller;
 
 
