@@ -51,8 +51,12 @@ export class Renderer {
 	}
 
 	_initStats() {
-		this.stats = new Stats();
-		document.body.appendChild(this.stats.dom);
+		this.renderStats = new Stats();
+		this.physicsStats = new Stats();
+		this.physicsStats.dom.style.cssText = 'position:fixed;top:50px;left:0;cursor:pointer;opacity:0.9;z-index:10000';
+		this.physicsStats.showPanel(1);
+		document.body.appendChild(this.renderStats.dom);
+		document.body.appendChild(this.physicsStats.dom);
 	}
 
 	_initRenderer() {
@@ -123,10 +127,12 @@ export class Renderer {
 		requestAnimationFrame(this.animate.bind(this));
 		this.controls.update();
 		if (this.physics) {
+			this.physicsStats.begin();
 			this.physics.update();
+			this.physicsStats.end();
 		}
-		this.stats.begin();
+		this.renderStats.begin();
 		this.renderer.render(this.scene, this.camera);
-		this.stats.end();
+		this.renderStats.end();
 	}
 }
