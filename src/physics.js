@@ -17,18 +17,20 @@ export class Physics {
 		this.tableItems = {};
 
 		const playfield = this.scene.children.find(c => c.name === 'playfield');
+
+		// index scene items
 		if (playfield) {
-			const flippers = playfield.children.find(c => c.name === 'flippers');
-			if (flippers) {
-				for (const flipper of flippers.children) {
-					this.sceneItems[flipper.name] = flipper;
-					flipper.matrixAutoUpdate = false;
+			for (const itemGroup of playfield.children) {
+				for (const item of itemGroup.children) {
+					this.sceneItems[item.name] = item;
+					item.matrixAutoUpdate = false;
 				}
 			}
 		}
 
-		for (const name of Object.keys(table.flippers)) {
-			this.tableItems[name] = table.flippers[name];
+		// index table items
+		for (const movable of table.getMovables()) {
+			this.tableItems[movable.getName()] = movable;
 		}
 	}
 
@@ -59,6 +61,16 @@ export class Physics {
 		return true;
 	}
 
+	plungerKeyDown() {
+		this.table.plungers[0].pullBack();
+		return true;
+	}
+
+	plungerKeyUp() {
+		this.table.plungers[0].fire();
+		return true;
+	}
+
 	_updateState(state) {
 		if (!state) {
 			return;
@@ -78,16 +90,9 @@ export class Physics {
 				console.debug('[Latency] = %sms', Math.round(lat * 1000) / 1000);
 				this.keyDownTime = undefined;
 			}
-
-			const itemState = FlipperState.fromSerialized(state[name]); // todo generalize
 			const tableItem = this.tableItems[name];
 			const sceneItem = this.sceneItems[name];
-
-			const matrix = tableItem.updateState(itemState);
-			if (matrix) {
-				sceneItem.applyMatrix(matrix);
-			}
+			tableItem.updateState(state[name], sceneItem);
 		}
-		//console.log('new state:', state);
 	}
 }

@@ -25,7 +25,11 @@ export class Controller {
 			case 'ShiftRight':
 				return down ? this.physics.rightFlipperKeyDown() : this.physics.rightFlipperKeyUp();
 
+			case 'Enter':
+				return down ? this.physics.plungerKeyDown() : this.physics.plungerKeyUp();
+
 			default:
+				console.log(event.type, event.code);
 				break;
 		}
 		return false;

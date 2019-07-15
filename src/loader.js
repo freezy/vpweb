@@ -38,6 +38,7 @@ export class Loader {
 			exportKickers: true,
 			exportTriggers: true,
 			exportSpinners: true,
+			exportPlungers: true,
 			gltfOptions: {compressVertices: false, forcePowerOfTwoTextures: false},
 		});
 		console.log('Scene created in %sms.', Date.now() - now, table, scene);
