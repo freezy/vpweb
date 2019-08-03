@@ -1,4 +1,4 @@
-import {Table} from '../../vpx-toolbox/dist/lib/vpt/table';
+import {Table} from '../../vpx-toolbox/dist/lib/vpt/table/table';
 import {BrowserBinaryReader} from '../../vpx-toolbox/dist/lib/io/binary-reader.browser';
 
 import {Renderer} from './renderer';

@@ -1,6 +1,6 @@
 import {FlipperState} from '../../vpx-toolbox/dist/lib/vpt/flipper/flipper-state'
 import {Player} from '../../vpx-toolbox/dist/lib/game/player'
-import {Table} from '../../vpx-toolbox/dist/lib/vpt/table'
+import {Table} from '../../vpx-toolbox/dist/lib/vpt/table/table'
 
 export class Physics {
 
@@ -62,26 +62,23 @@ export class Physics {
 	}
 
 	plungerKeyDown() {
-		this.table.plungers[0].pullBack();
+		this.table.plungers.Plunger.pullBack();
 		return true;
 	}
 
 	plungerKeyUp() {
-		this.table.plungers[0].fire();
+		this.table.plungers.Plunger.fire();
 		return true;
 	}
 
-	_updateState(state) {
-		if (!state) {
-			return;
-		}
-		for (const name of Object.keys(state)) {
-			if (!this.sceneItems[name]) {
-				console.warn('No scene item called %s found!', name, state[name]);
+	_updateState(states) {
+		for (const state of states) {
+			if (!this.sceneItems[state.getName()]) {
+				console.warn('No scene item called %s found!', state.getName(), states);
 				break;
 			}
-			if (!this.tableItems[name]) {
-				console.warn('No table item called %s found!', name, state[name]);
+			if (!this.tableItems[state.getName()]) {
+				console.warn('No table item called %s found!', state.getName(), states);
 				break;
 			}
 
@@ -90,9 +87,9 @@ export class Physics {
 				console.debug('[Latency] = %sms', Math.round(lat * 1000) / 1000);
 				this.keyDownTime = undefined;
 			}
-			const tableItem = this.tableItems[name];
-			const sceneItem = this.sceneItems[name];
-			tableItem.updateState(state[name], sceneItem);
+			const tableItem = this.tableItems[state.getName()];
+			const sceneItem = this.sceneItems[state.getName()];
+			tableItem.applyState(sceneItem, this.table);
 		}
 	}
 }
