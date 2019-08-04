@@ -3,6 +3,7 @@ import {BrowserBinaryReader} from '../../vpx-toolbox/dist/lib/io/binary-reader.b
 
 import {Renderer} from './renderer';
 import {Physics} from './physics';
+import {Group} from "three";
 
 export class Loader {
 
@@ -26,12 +27,12 @@ export class Loader {
 			exportLightBulbLights: false,
 
 			exportPlayfield: true,
-			exportPrimitives: true,
+			exportPrimitives: false,
 			exportRubbers: true,
-			exportSurfaces: true,
+			exportSurfaces: false,
 			exportFlippers: true,
 			exportBumpers: true,
-			exportRamps: true,
+			exportRamps: false,
 			exportLightBulbs: true,
 			exportHitTargets: true,
 			exportGates: true,
@@ -55,7 +56,14 @@ export class Loader {
 				this.renderer.init();
 				this.renderer.animate();
 			}
-			this.renderer.setPlayfield(scene.children[0]);
+
+			const playfield = scene.children[0];
+			// add group for when balls get added
+			const ballGroup = new Group();
+			ballGroup.name = 'balls';
+			playfield.add(ballGroup);
+
+			this.renderer.setPlayfield(playfield);
 			this.renderer.setPhysics(new Physics(table, this.renderer.scene));
 
 			return this.renderer;

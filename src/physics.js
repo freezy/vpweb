@@ -1,4 +1,3 @@
-import {FlipperState} from '../../vpx-toolbox/dist/lib/vpt/flipper/flipper-state'
 import {Player} from '../../vpx-toolbox/dist/lib/game/player'
 import {Table} from '../../vpx-toolbox/dist/lib/vpt/table/table'
 
@@ -9,9 +8,25 @@ export class Physics {
 	 * @param {Scene} scene
 	 */
 	constructor(table, scene) {
+		/** @type Table */
 		this.table = table;
 		this.scene = scene;
 		this._player = new Player(table);
+		this._player.on('ballCreated', name => {
+			console.log('Created ball:', name);
+			const ball = this._player.balls.find(b => b.getName() === name);
+			this.table.exportElement(ball).then(mesh => {
+				const playfield = this.scene.children.find(c => c.name === 'playfield');
+				const ballGroup = playfield.children.find(c => c.name === 'balls');
+				mesh.matrixAutoUpdate = false;
+				ballGroup.add(mesh);
+				this.sceneItems[name] = mesh;
+				this.tableItems[name] = ball;
+			});
+		});
+		this._player.on('ballDestroyed', ball => {
+			console.log('Destroyed ball:', ball);
+		});
 
 		this.sceneItems = {};
 		this.tableItems = {};
@@ -71,6 +86,10 @@ export class Physics {
 		return true;
 	}
 
+	createBall() {
+		this._player.createBall(this.table.kickers.BallRelease);
+	}
+
 	_updateState(states) {
 		for (const state of states) {
 			if (!this.sceneItems[state.getName()]) {
@@ -89,7 +108,7 @@ export class Physics {
 			}
 			const tableItem = this.tableItems[state.getName()];
 			const sceneItem = this.sceneItems[state.getName()];
-			tableItem.applyState(sceneItem, this.table);
+			tableItem.applyState(sceneItem, this.table, this._player);
 		}
 	}
 }

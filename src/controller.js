@@ -28,6 +28,11 @@ export class Controller {
 			case 'Enter':
 				return down ? this.physics.plungerKeyDown() : this.physics.plungerKeyUp();
 
+			case 'KeyB':
+				if (down) {
+					return this.physics.createBall();
+				}
+
 			default:
 				console.log(event.type, event.code);
 				break;
