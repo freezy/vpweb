@@ -32,7 +32,7 @@ export class Loader {
 			exportSurfaces: false,
 			exportFlippers: true,
 			exportBumpers: true,
-			exportRamps: false,
+			exportRamps: true,
 			exportLightBulbs: true,
 			exportHitTargets: true,
 			exportGates: true,

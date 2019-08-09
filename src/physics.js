@@ -1,5 +1,6 @@
 import {Player} from '../../vpx-toolbox/dist/lib/game/player'
 import {Table} from '../../vpx-toolbox/dist/lib/vpt/table/table'
+import {BoxGeometry, LineBasicMaterial, Mesh, MeshBasicMaterial} from "three";
 
 export class Physics {
 
@@ -46,6 +47,26 @@ export class Physics {
 		// index table items
 		for (const movable of table.getMovables()) {
 			this.tableItems[movable.getName()] = movable;
+		}
+
+		// draw hit rectangles
+		for (const hittable of table.getHittables().filter(h => h.constructor.name === 'Flipper')) {
+			for (const hitObject of hittable.getHitShapes()) {
+				hitObject.calcHitBBox();
+				const rect = hitObject.hitBBox;
+
+				const boxGeometry = new BoxGeometry(rect.width, rect.height, rect.depth);
+				const mat = new MeshBasicMaterial({
+					color: 0xff0000,
+					wireframe: true
+				});
+				const box = new Mesh(boxGeometry, mat);
+				//const wireframe = new WireframeHelper( box, 0x00ff00 );
+				box.position.set(rect.right, rect.top, -rect.zhigh);
+
+				playfield.add(box);
+				//playfield.add(wireframe);
+			}
 		}
 	}
 
