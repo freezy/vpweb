@@ -4,6 +4,7 @@ import {BrowserBinaryReader} from '../../vpx-js/dist/lib/io/binary-reader.browse
 import {Renderer} from './renderer';
 import {Physics} from './physics';
 import {Group} from "three";
+import {Controller} from "./controller";
 
 export class Loader {
 
@@ -80,7 +81,13 @@ export class Loader {
 				if (item.kind === 'file') {
 					const file = item.getAsFile();
 					this.cache.save(file);
-					this.loadVpx(file).then(this.onVpxLoaded.bind(this));
+					this.loadVpx(file)
+						.then(this.onVpxLoaded.bind(this))
+						.then(renderer => {
+							if (renderer) {
+								window.controller = new Controller(renderer);
+							}
+						});
 				}
 			}
 		} else {
