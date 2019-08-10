@@ -1,5 +1,5 @@
-import {Table} from '../../vpx-toolbox/dist/lib/vpt/table/table';
-import {BrowserBinaryReader} from '../../vpx-toolbox/dist/lib/io/binary-reader.browser';
+import {Table} from '../../vpx-js/dist/lib/vpt/table/table';
+import {BrowserBinaryReader} from '../../vpx-js/dist/lib/io/binary-reader.browser';
 
 import {Renderer} from './renderer';
 import {Physics} from './physics';
@@ -27,9 +27,9 @@ export class Loader {
 			exportLightBulbLights: false,
 
 			exportPlayfield: true,
-			exportPrimitives: false,
+			exportPrimitives: true,
 			exportRubbers: true,
-			exportSurfaces: false,
+			exportSurfaces: true,
 			exportFlippers: true,
 			exportBumpers: true,
 			exportRamps: true,
