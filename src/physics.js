@@ -1,5 +1,6 @@
 import {Player} from '../../vpx-js/dist/lib/game/player'
 import {Table} from '../../vpx-js/dist/lib/vpt/table/table'
+import {Vertex3D} from '../../vpx-js/dist/lib/math/vertex3d'
 
 export class Physics {
 
@@ -27,6 +28,8 @@ export class Physics {
 		this._player.on('ballDestroyed', ball => {
 			console.log('Destroyed ball:', ball);
 		});
+
+		window.vpw.player = this._player;
 
 		this.sceneItems = {};
 		this.tableItems = {};
@@ -67,6 +70,20 @@ export class Physics {
 		// 		//playfield.add(wireframe);
 		// 	}
 		// }
+
+		// debug functions
+		window.vpw.createBall = function(x, y, z, vx, vy, vz) {
+			return this._player.createBall({
+				getBallCreationPosition(t) {
+					return new Vertex3D(x, y, z || 0);
+				},
+				getBallCreationVelocity(t) {
+					return new Vertex3D(vx || 0, vy || 0, vz || 0);
+				},
+				onBallCreated(p, b) {
+				},
+			});
+		}.bind(this);
 	}
 
 	update() {

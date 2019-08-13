@@ -35,7 +35,7 @@ export class Renderer {
 	}
 
 	_initScene() {
-		this.scene = window.scene = new Scene();
+		this.scene = window.vpw.scene = new Scene();
 		this.scene.scale.set(this.playfieldScale, this.playfieldScale, this.playfieldScale);
 
 		this.cameraDefaults = {

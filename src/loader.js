@@ -67,6 +67,9 @@ export class Loader {
 			this.renderer.setPlayfield(playfield);
 			this.renderer.setPhysics(new Physics(table, this.renderer.scene));
 
+			window.vpw.table = table;
+			window.vpw.physics = this.renderer.physics;
+
 			return this.renderer;
 		});
 	}
