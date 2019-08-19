@@ -25,6 +25,9 @@ export class FileCache {
 			return Promise.resolve();
 		}
 		const response = await this.cache.match(this.key);
+		if (!response) {
+			return Promise.resolve();
+		}
 		return response.blob();
 	}
 }

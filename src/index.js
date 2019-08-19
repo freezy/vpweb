@@ -3,10 +3,11 @@ import { Controller } from './controller';
 import { FileCache } from './file-cache';
 import { Loader } from './loader';
 
-window.vpw = {};
-
 const cache = new FileCache();
 const loader = new Loader(cache);
+
+window.vpw = { loader };
+
 cache.init()
 	.then(() => cache.get())
 	.then(cachedVpx => {
@@ -20,7 +21,5 @@ cache.init()
 			window.vpw.controller = new Controller(renderer);
 		}
 	});
-
-window.vpw.loader = loader;
 
 

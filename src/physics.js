@@ -29,8 +29,6 @@ export class Physics {
 			console.log('Destroyed ball:', ball);
 		});
 
-		window.vpw.player = this._player;
-
 		this.sceneItems = {};
 		this.tableItems = {};
 
@@ -42,6 +40,9 @@ export class Physics {
 				for (const item of itemGroup.children) {
 					this.sceneItems[item.name] = item;
 					item.matrixAutoUpdate = false;
+					for (const meshItem of item.children) {
+						meshItem.matrixAutoUpdate = false;
+					}
 				}
 			}
 		}
@@ -50,6 +51,15 @@ export class Physics {
 		for (const movable of table.getMovables()) {
 			this.tableItems[movable.getName()] = movable;
 		}
+		for (const movable of table.getAnimatables()) {
+			this.tableItems[movable.getName()] = movable;
+		}
+
+		// index public apis
+		window.vpw.items = table.getElementApis();
+		window.vpw.player = this._player;
+		window.vpw.sceneItems = this.sceneItems;
+		window.vpw.tableItems = this.tableItems;
 
 		// draw hit rectangles
 		// for (const hittable of table.getHittables().filter(h => h.constructor.name === 'Flipper')) {
@@ -88,7 +98,7 @@ export class Physics {
 
 	update() {
 		this._player.updatePhysics();
-		this._updateState(this._player.popState())
+		this._updateState(this._player.popStates())
 	}
 
 	leftFlipperKeyDown() {
