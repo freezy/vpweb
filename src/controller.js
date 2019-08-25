@@ -19,9 +19,11 @@ export class Controller {
 		const down = event.type === 'keydown';
 		switch (event.code) {
 
+			case 'ControlLeft':
 			case 'ShiftLeft':
 				return down ? this.physics.leftFlipperKeyDown() : this.physics.leftFlipperKeyUp();
 
+			case 'ControlRight':
 			case 'ShiftRight':
 				return down ? this.physics.rightFlipperKeyDown() : this.physics.rightFlipperKeyUp();
 

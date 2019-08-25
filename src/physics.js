@@ -16,11 +16,7 @@ export class Physics {
 		this._player.on('ballCreated', name => {
 			console.log('Created ball:', name);
 			const ball = this._player.balls.find(b => b.getName() === name);
-			this.table.exportElement(ball).then(mesh => {
-				const playfield = this.scene.children.find(c => c.name === 'playfield');
-				const ballGroup = playfield.children.find(c => c.name === 'balls');
-				mesh.matrixAutoUpdate = false;
-				ballGroup.add(mesh);
+			ball.addToScene(this.scene, this.table).then(mesh => {
 				this.sceneItems[name] = mesh;
 				this.tableItems[name] = ball;
 			});
@@ -103,23 +99,23 @@ export class Physics {
 
 	leftFlipperKeyDown() {
 		this.keyDownTime = performance.now();
-		this.table.flippers.LeftFlipper.rotateToEnd();
+		this.table.flippers.LeftFlipper.getApi().rotateToEnd();
 		return true;
 	}
 
 	leftFlipperKeyUp() {
-		this.table.flippers.LeftFlipper.rotateToStart();
+		this.table.flippers.LeftFlipper.getApi().rotateToStart();
 		return true;
 	}
 
 	rightFlipperKeyDown() {
 		this.keyDownTime = performance.now();
-		this.table.flippers.RightFlipper.rotateToEnd();
+		this.table.flippers.RightFlipper.getApi().rotateToEnd();
 		return true;
 	}
 
 	rightFlipperKeyUp() {
-		this.table.flippers.RightFlipper.rotateToStart();
+		this.table.flippers.RightFlipper.getApi().rotateToStart();
 		return true;
 	}
 
@@ -137,8 +133,14 @@ export class Physics {
 		this._player.createBall(this.table.kickers.BallRelease);
 	}
 
+	/**
+	 * Updates the scene according to the changed states.
+	 * @param {ChangedStates} states
+	 * @private
+	 */
 	_updateState(states) {
-		for (const state of states) {
+		for (const name of Object.keys(states)) {
+			const state = states[name].newState;
 			if (!this.sceneItems[state.getName()]) {
 				console.warn('No scene item called %s found!', state.getName(), states);
 				break;
@@ -155,7 +157,7 @@ export class Physics {
 			}
 			const tableItem = this.tableItems[state.getName()];
 			const sceneItem = this.sceneItems[state.getName()];
-			tableItem.applyState(sceneItem, this.table, this._player);
+			tableItem.applyState(sceneItem, this.table, this._player, states[name].oldState);
 		}
 	}
 }
