@@ -88,7 +88,7 @@ export class Loader {
 						.then(this.onVpxLoaded.bind(this))
 						.then(renderer => {
 							if (renderer) {
-								window.controller = new Controller(renderer);
+								window.vpw.controller = new Controller(renderer);
 							}
 						});
 				}

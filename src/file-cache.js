@@ -1,7 +1,6 @@
 
 export class FileCache {
 
-
 	constructor() {
 		this.isAvailable = 'caches' in self;
 		this.key = new Request('/last-vpx-upload');
