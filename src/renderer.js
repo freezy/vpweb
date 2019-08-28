@@ -77,7 +77,7 @@ export class Renderer {
 		this.controls.target = this.cameraDefaults.posCameraTarget;
 		this.controls.enableDamping = true;
 		this.controls.dampingFactor = 0.1;
-		this.controls.rotateSpeed = 0.1;
+		this.controls.rotateSpeed = 1;
 		this.controls.panSpeed = 0.2;
 		this.controls.update();
 	}
