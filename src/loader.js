@@ -65,8 +65,6 @@ export class Loader {
 			window.vpw.table = table;
 			window.vpw.physics = this.renderer.physics;
 
-			table.play();
-
 			return this.renderer;
 		});
 	}

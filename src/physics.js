@@ -13,17 +13,23 @@ export class Physics {
 		this.table = table;
 		this.scene = scene;
 		this._player = new Player(table);
-		this._player.on('ballCreated', name => {
+		this._player.on('ballCreated', ball => {
+			const name = ball.getName();
 			console.log('Created ball:', name);
-			const ball = this._player.balls.find(b => b.getName() === name);
 			ball.addToScene(this.scene, this.table).then(mesh => {
 				this.sceneItems[name] = mesh;
 				this.tableItems[name] = ball;
 			});
+			this.ballName = ball.getName();
 		});
 		this._player.on('ballDestroyed', ball => {
 			console.log('Destroyed ball:', ball);
+			delete this.sceneItems[ball.getName()];
+			delete this.tableItems[ball.getName()];
+			ball.removeFromScene(this.scene);
+			this.ballName = undefined;
 		});
+		this._player.init();
 
 		this.sceneItems = {};
 		this.tableItems = {};
@@ -130,7 +136,7 @@ export class Physics {
 	}
 
 	createBall() {
-		this._player.createBall(this.table.kickers.BallRelease);
+		const ball = this._player.createBall(this.table.kickers.BallRelease);
 	}
 
 	/**
@@ -139,10 +145,14 @@ export class Physics {
 	 * @private
 	 */
 	_updateState(states) {
+
+		if (this.ballName && !Object.keys(states).includes(this.ballName)) {
+			console.warn('Ball did not move!');
+		}
 		for (const name of Object.keys(states)) {
 			const state = states[name].newState;
 			if (!this.sceneItems[state.getName()]) {
-				console.warn('No scene item called %s found!', state.getName(), states);
+				//console.warn('No scene item called %s found!', state.getName(), states);
 				break;
 			}
 			if (!this.tableItems[state.getName()]) {
