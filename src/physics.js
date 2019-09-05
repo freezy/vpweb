@@ -100,7 +100,9 @@ export class Physics {
 
 	update() {
 		this._player.updatePhysics();
-		this._updateState(this._player.popStates())
+		const states = this._player.popStates();
+		this._updateState(states);
+		states.release();
 	}
 
 	leftFlipperKeyDown() {
@@ -146,11 +148,11 @@ export class Physics {
 	 */
 	_updateState(states) {
 
-		if (this.ballName && !Object.keys(states).includes(this.ballName)) {
+		if (this.ballName && !states.keys.includes(this.ballName)) {
 			console.warn('Ball did not move!');
 		}
-		for (const name of Object.keys(states)) {
-			const state = states[name].newState;
+		for (const name of states.keys) {
+			const state = states.getState(name).newState;
 			if (!this.sceneItems[state.getName()]) {
 				//console.warn('No scene item called %s found!', state.getName(), states);
 				break;
@@ -167,7 +169,7 @@ export class Physics {
 			}
 			const tableItem = this.tableItems[state.getName()];
 			const sceneItem = this.sceneItems[state.getName()];
-			tableItem.applyState(sceneItem, this.table, this._player, states[name].oldState);
+			tableItem.applyState(sceneItem, this.table, this._player, states.getState(name).oldState);
 		}
 	}
 }
