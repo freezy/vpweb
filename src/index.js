@@ -1,4 +1,13 @@
 import './index.sass';
+
+// class A {
+// 	constructor() {
+// 		console.log('A created!');
+// 	}
+// }
+//
+// const a = new A();
+
 import { Controller } from './controller';
 import { FileCache } from './file-cache';
 import { Loader } from './loader';
@@ -21,5 +30,3 @@ cache.init()
 			window.vpw.controller = new Controller(renderer);
 		}
 	});
-
-
