@@ -164,7 +164,7 @@ export class Physics {
 
 			if (this.keyDownTime) {
 				const lat = performance.now() - this.keyDownTime;
-				console.debug('[Latency] = %sms', Math.round(lat * 1000) / 1000);
+				//console.debug('[Latency] = %sms', Math.round(lat * 1000) / 1000);
 				this.keyDownTime = undefined;
 			}
 			const tableItem = this.tableItems[state.getName()];
