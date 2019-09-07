@@ -1,4 +1,4 @@
-const { resolve } = require('path');
+const { resolve, relative } = require('path');
 const esprima = require('esprima');
 const acorn = require('acorn');
 const traverse = require('estraverse');
@@ -9,11 +9,7 @@ module.exports = function(source, map, meta) {
 		this.cacheable();
 	}
 
-	const root = resolve(__dirname, '..');
-	let filePath = this.resourcePath.replace(root, '').replace(/\\/g, '/');
-	if (filePath.startsWith('/')) {
-		filePath = filePath.substr(1);
-	}
+	const filePath = 'webpack:///' + relative(resolve(__dirname, '..'), this.resourcePath).replace(/\\/g, '/');
 	try {
 		const ast = acorn.parse(source,  { sourceType: 'module' });
 		const modifiedAst = traverse.replace(ast, {
@@ -22,7 +18,7 @@ module.exports = function(source, map, meta) {
 					return node;
 				}
 
-				const key = `${filePath}#${findLine(source, node.start)}`;
+				const key = `${filePath}:${findLine(source, node.start)}`;
 				return {
 					type: 'CallExpression',
 					callee: {
