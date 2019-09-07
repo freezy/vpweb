@@ -24,7 +24,7 @@ function logAllocations() {
 		const total = Object.values(allocations[className]).reduce((prev, curr) => prev + curr, 0);
 		console.debug('[%s] %s', className, total);
 		for (const location of Object.keys(allocations[className])) {
-			console.debug('   %d %s', allocations[className][location], location);
+			console.debug('   %d @ %s', allocations[className][location], location);
 			n += allocations[className][location] ;
 		}
 	}
