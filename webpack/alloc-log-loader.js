@@ -14,7 +14,10 @@ module.exports = function(source, map, meta) {
 		const ast = acorn.parse(source,  { sourceType: 'module' });
 		const modifiedAst = traverse.replace(ast, {
 			leave: node => {
-				if (node.type !== 'NewExpression') {
+				if (filePath.includes('alloc-log-collector')) {
+					return node;
+				}
+				if (node.type !== 'NewExpression' && node.type !== 'ObjectExpression' && node.type !== 'ArrayExpression') {
 					return node;
 				}
 
