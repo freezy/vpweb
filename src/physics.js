@@ -8,15 +8,16 @@ export class Physics {
 	 * @param {Table} table
 	 * @param {Scene} scene
 	 */
-	constructor(table, scene) {
+	constructor(table, scene, renderApi) {
 		/** @type Table */
 		this.table = table;
 		this.scene = scene;
+		this.renderApi = renderApi;
 		this._player = new Player(table);
 		this._player.on('ballCreated', ball => {
 			const name = ball.getName();
 			console.log('Created ball:', name);
-			ball.addToScene(this.scene, this.table).then(mesh => {
+			ball.addToScene(this.scene, this.renderApi, this.table).then(mesh => {
 				this.sceneItems[name] = mesh;
 				this.tableItems[name] = ball;
 			});
@@ -26,7 +27,7 @@ export class Physics {
 			console.log('Destroyed ball:', ball);
 			delete this.sceneItems[ball.getName()];
 			delete this.tableItems[ball.getName()];
-			ball.removeFromScene(this.scene);
+			ball.removeFromScene(this.scene, this.renderApi);
 			this.ballName = undefined;
 		});
 		this._player.init();
@@ -169,7 +170,7 @@ export class Physics {
 			}
 			const tableItem = this.tableItems[state.getName()];
 			const sceneItem = this.sceneItems[state.getName()];
-			tableItem.applyState(sceneItem, this.table, this._player, states.getState(name).oldState);
+			tableItem.applyState(sceneItem, this.renderApi, this.table, this._player, states.getState(name).oldState);
 		}
 	}
 }
