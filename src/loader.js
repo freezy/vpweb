@@ -1,29 +1,32 @@
 import {Table} from '../../vpx-js/dist/lib/vpt/table/table';
+import {ThreeRenderApi} from '../../vpx-js/dist/lib/render/threejs/three-render-api'
 import {BrowserBinaryReader} from '../../vpx-js/dist/lib/io/binary-reader.browser';
 
 import {Renderer} from './renderer';
 import {Physics} from './physics';
-import {Group} from "three";
 import {Controller} from "./controller";
+import {Scene} from "three";
 
 export class Loader {
 
 	constructor(cache) {
 		this.cache = cache;
 		this.dropzone = document.getElementById('dropzone');
+		this.renderApi = new ThreeRenderApi({
+			applyMaterials: true,
+			applyTextures: false,
+			optimizeTextures: false,
+		});
 	}
 
 	async loadVpx(file) {
-		const table = await Table.load(new BrowserBinaryReader(file));
-		return table;
+		return await Table.load(new BrowserBinaryReader(file));
 	}
 
 	async createScene(table) {
 		const now = Date.now();
-		const scene = await table.exportScene({
-			applyMaterials: true,
-			applyTextures: false,
-			optimizeTextures: false,
+		const tableObj = await table.generateTableNode(this.renderApi, {
+
 			exportPlayfieldLights: true,
 			exportLightBulbLights: false,
 
@@ -43,7 +46,10 @@ export class Loader {
 			exportPlungers: true,
 			gltfOptions: {compressVertices: false, forcePowerOfTwoTextures: false},
 		});
-		console.log('Scene created in %sms.', Date.now() - now, table, scene);
+		const scene = new Scene();
+		scene.name = 'table';
+		scene.add(tableObj);
+		console.log('Scene created in %sms.', Date.now() - now, table, tableObj);
 		return scene;
 	}
 
@@ -60,7 +66,7 @@ export class Loader {
 
 			const playfield = scene.children[0];
 			this.renderer.setPlayfield(playfield);
-			this.renderer.setPhysics(new Physics(table, this.renderer.scene));
+			this.renderer.setPhysics(new Physics(table, this.renderer.scene, this.renderApi));
 
 			window.vpw.table = table;
 			window.vpw.physics = this.renderer.physics;
