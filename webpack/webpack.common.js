@@ -7,7 +7,6 @@ module.exports = () => {
 		entry: {
 			'app': './src/index.js',
 		},
-		mode: 'development',
 		plugins: [
 			new HtmlWebpackPlugin({
 				template: 'src/index.html',
@@ -19,7 +18,6 @@ module.exports = () => {
 		],
 		module: {
 			rules: [
-				{ test: /\.js$/, use: [{ loader: resolve('./webpack/alloc-log-loader'), }]},
 				{
 					test: /\.(scss|sass)$/,
 					use: [{
@@ -42,7 +40,7 @@ module.exports = () => {
 			],
 		},
 		output: {
-			path: resolve(__dirname, 'dist'),
+			path: resolve(__dirname, '..', 'dist'),
 			filename: '[name].bundle-[chunkhash].js',
 			hashFunction: 'sha256',
 			hashDigest: 'hex',
