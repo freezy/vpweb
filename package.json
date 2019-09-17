@@ -10,9 +10,10 @@
 	"scripts": {
 		"start": "npm run serve",
 		"serve": "webpack-dev-server --config webpack/webpack.dev.js --inline --progress",
-		"serve:prod": "npm run build && http-server ./dist",
+		"serve:prod": "npm run build && http-server ./dist -a 127.0.0.1",
+		"build": "rimraf dist && webpack --config webpack/webpack.prod.js --bail --progress --profile --json > stats.json",
 		"build:analyze": "rimraf dist && webpack --config webpack/webpack.analyze.js --bail --progress --profile --json > stats.json",
-		"build": "rimraf dist && webpack --config webpack/webpack.prod.js --bail --progress --profile --json > stats.json && http-server ./dist -a 127.0.0.1"
+		"build:dev": "rimraf dist && webpack --config webpack/webpack.dev.js --bail --progress --profile --json > stats.json"
 	},
 	"keywords": [
 		"vpinball",

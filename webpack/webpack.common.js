@@ -38,6 +38,7 @@ module.exports = () => {
 					}]
 				},
 			],
+			noParse: /moo\.js/
 		},
 		output: {
 			path: resolve(__dirname, '..', 'dist'),

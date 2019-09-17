@@ -9,6 +9,10 @@ module.exports = function(source, map, meta) {
 		this.cacheable();
 	}
 
+	if (this.resourcePath.endsWith('moo.js')) { // TODO retrieve this from module.noParse
+		return source;
+	}
+
 	const filePath = 'webpack:///' + relative(resolve(__dirname, '..'), this.resourcePath).replace(/\\/g, '/');
 	try {
 		const ast = acorn.parse(source,  { sourceType: 'module' });
