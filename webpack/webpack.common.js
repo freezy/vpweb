@@ -37,6 +37,10 @@ module.exports = () => {
 						loader: 'sass-loader' // compiles Sass to CSS
 					}]
 				},
+				{
+					test: /\.(eot|woff|woff2|ttf|otf|png|svg|jpg|swf)$/,
+					loader: { loader: 'file-loader', options: {name: '[path][name]-[sha256:hash:base58:8].[ext]'} },
+				},
 			],
 			noParse: /moo\.js/
 		},

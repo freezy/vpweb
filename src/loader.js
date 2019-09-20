@@ -1,6 +1,7 @@
 import {Table} from '../../vpx-js/dist/lib/vpt/table/table';
 import {ThreeRenderApi} from '../../vpx-js/dist/lib/render/threejs/three-render-api'
 import {BrowserBinaryReader} from '../../vpx-js/dist/lib/io/binary-reader.browser';
+import {ThreeTextureLoaderBrowser} from '../../vpx-js/dist/lib/render/threejs/three-texture-loader-browser';
 
 import {Renderer} from './renderer';
 import {Physics} from './physics';
@@ -14,7 +15,7 @@ export class Loader {
 		this.dropzone = document.getElementById('dropzone');
 		this.renderApi = new ThreeRenderApi({
 			applyMaterials: true,
-			applyTextures: false,
+			applyTextures: new ThreeTextureLoaderBrowser(),
 			optimizeTextures: false,
 		});
 	}
