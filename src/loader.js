@@ -29,7 +29,7 @@ export class Loader {
 		const tableObj = await table.generateTableNode(this.renderApi, {
 
 			exportPlayfieldLights: true,
-			exportLightBulbLights: false,
+			exportLightBulbLights: true,
 
 			exportPlayfield: true,
 			exportPrimitives: true,

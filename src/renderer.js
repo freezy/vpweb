@@ -1,4 +1,12 @@
-import {AmbientLight, DirectionalLight, PerspectiveCamera, Scene, Vector3, WebGLRenderer} from 'three';
+import {
+	AmbientLight, BasicShadowMap,
+	DirectionalLight,
+	PCFSoftShadowMap,
+	PerspectiveCamera,
+	Scene,
+	Vector3, VSMShadowMap,
+	WebGLRenderer
+} from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import Stats from 'stats.js/src/Stats';
 
@@ -65,7 +73,8 @@ export class Renderer {
 			autoClear: true,
 			alpha: true,
 		});
-		//this.renderer.shadowMap.enabled = true;
+		this.renderer.shadowMap.enabled = true;
+		this.renderer.shadowMap.type = VSMShadowMap;
 		this.renderer.setPixelRatio(window.devicePixelRatio);
 		this.renderer.setSize(window.innerWidth, window.innerHeight);
 		window.addEventListener('resize', this.onWindowResize.bind(this), false);
@@ -89,6 +98,9 @@ export class Renderer {
 
 		// front
 		this.directionalLightFront = new DirectionalLight(0xffffff);
+		// this.directionalLightFront.castShadow = true;
+		// this.directionalLightFront.shadow.bias = -0.002;
+		// this.directionalLightFront.shadow.radius = 20;
 		this.directionalLightFront.position.set(0, 30, 20);
 		this.directionalLightFront.target.position.set(0, 0, 0);
 		this.directionalLightFront.target.updateMatrixWorld();
@@ -97,6 +109,9 @@ export class Renderer {
 
 		// back
 		this.directionalLightBack = new DirectionalLight(0xffffff);
+		// this.directionalLightBack.castShadow = true;
+		// this.directionalLightBack.shadow.bias = -0.002;
+		// this.directionalLightBack.shadow.radius = 20;
 		this.directionalLightBack.position.set(0, 30, -30);
 		this.directionalLightBack.target.position.set(0, 0, -10);
 		this.directionalLightBack.target.updateMatrixWorld();

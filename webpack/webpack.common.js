@@ -38,7 +38,7 @@ module.exports = () => {
 					}]
 				},
 				{
-					test: /\.(eot|woff|woff2|ttf|otf|png|svg|jpg|swf)$/,
+					test: /\.(eot|woff|woff2|ttf|otf|png|svg|jpg|swf|hdr|exr)$/,
 					loader: { loader: 'file-loader', options: {name: '[path][name]-[sha256:hash:base58:8].[ext]'} },
 				},
 			],
