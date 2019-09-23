@@ -1,7 +1,7 @@
 import {Table} from '../../vpx-js/dist/lib/vpt/table/table'
 import {Player} from '../../vpx-js/dist/lib/game/player'
 
-class PhysicsWorker {
+class PlayerWorker {
 
 	constructor() {
 		this.fps = 50;
@@ -77,7 +77,7 @@ class PhysicsWorker {
 	}
 }
 
-const physicsWorker = new PhysicsWorker();
+const physicsWorker = new PlayerWorker();
 
 onmessage = e => {
 	// init

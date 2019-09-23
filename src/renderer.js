@@ -36,10 +36,10 @@ export class Renderer {
 	}
 
 	/**
-	 * @param {Physics} physics
+	 * @param {PlayerController} player
 	 */
-	setPhysics(physics) {
-		this.physics = physics;
+	setPlayer(player) {
+		this.player = player;
 	}
 
 	_initScene() {
@@ -141,9 +141,9 @@ export class Renderer {
 	animate() {
 		requestAnimationFrame(this.animate.bind(this));
 		this.controls.update();
-		if (this.physics) {
+		if (this.player) {
 			this.physicsStats.begin();
-			this.physics.update();
+			this.player.update();
 			this.physicsStats.end();
 		}
 		this.renderStats.begin();

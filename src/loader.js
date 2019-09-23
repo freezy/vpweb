@@ -4,9 +4,8 @@ import {BrowserBinaryReader} from '../../vpx-js/dist/lib/io/binary-reader.browse
 import {ThreeTextureLoaderBrowser} from '../../vpx-js/dist/lib/render/threejs/three-texture-loader-browser';
 
 import {Renderer} from './renderer';
-import {Physics} from './physics';
+import {PlayerController} from './player';
 import {Controller} from "./controller";
-import {Scene} from "three";
 
 export class Loader {
 
@@ -30,13 +29,14 @@ export class Loader {
 	 * @return {Promise<void>}
 	 */
 	async loadBlob(blob) {
-		this._parseBlob(blob)
-			.then(this._onVpxLoaded.bind(this))
-			.then(renderer => {
-				if (renderer) {
-					window.vpw.controller = new Controller(renderer);
-				}
-			});
+		const table = await this._parseBlob(blob);
+		const playfield = await this._generatePlayfield(table);
+		this._setupRenderer(playfield);
+		this._setupPlayer(blob, table);
+		this._setupController();
+
+		window.vpw.table = table;
+		window.vpw.physics = this.renderer.player;
 	}
 
 	/**
@@ -49,29 +49,10 @@ export class Loader {
 		return await Table.load(new BrowserBinaryReader(blob));
 	}
 
-	_onVpxLoaded(table) {
+	async _generatePlayfield(table) {
 		if (!table) {
 			return;
 		}
-		return this._createScene(table).then(scene => {
-			if (!this.renderer) {
-				this.renderer = new Renderer(scene);
-				this.renderer.init();
-				this.renderer.animate();
-			}
-
-			const playfield = scene.children[0];
-			this.renderer.setPlayfield(playfield);
-			this.renderer.setPhysics(new Physics(table, this.renderer.scene, this.renderApi));
-
-			window.vpw.table = table;
-			window.vpw.physics = this.renderer.physics;
-
-			return this.renderer;
-		});
-	}
-
-	async _createScene(table) {
 		const now = Date.now();
 		const tableObj = await table.generateTableNode(this.renderApi, {
 
@@ -94,11 +75,33 @@ export class Loader {
 			exportPlungers: true,
 			gltfOptions: {compressVertices: false, forcePowerOfTwoTextures: false},
 		});
-		const scene = new Scene();
-		scene.name = 'table';
-		scene.add(tableObj);
 		console.log('Scene created in %sms.', Date.now() - now, table, tableObj);
-		return scene;
+		return tableObj;
+	}
+
+	_setupRenderer(playfield) {
+		if (!playfield) {
+			return;
+		}
+
+		if (!this.renderer) {
+			this.renderer = new Renderer();
+			this.renderer.init();
+			this.renderer.animate();
+		}
+		this.renderer.setPlayfield(playfield);
+	}
+
+	_setupPlayer(blob, table) {
+		if (blob && table && this.renderer) {
+			this.renderer.setPlayer(new PlayerController(blob, table, this.renderer.scene, this.renderApi));
+		}
+	}
+
+	_setupController() {
+		if (this.renderer) {
+			window.vpw.controller = new Controller(this.renderer);
+		}
 	}
 
 	dropHandler(ev) {
