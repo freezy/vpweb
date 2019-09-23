@@ -10,6 +10,9 @@ import {Scene} from "three";
 
 export class Loader {
 
+	/**
+	 * @param {FileCache} cache
+	 */
 	constructor(cache) {
 		this.cache = cache;
 		this.dropzone = document.getElementById('dropzone');
@@ -20,11 +23,55 @@ export class Loader {
 		});
 	}
 
-	async loadVpx(file) {
-		return await Table.load(new BrowserBinaryReader(file));
+	/**
+	 * Loads everything given an uploaded Blob.
+	 *
+	 * @param blob
+	 * @return {Promise<void>}
+	 */
+	async loadBlob(blob) {
+		this._parseBlob(blob)
+			.then(this._onVpxLoaded.bind(this))
+			.then(renderer => {
+				if (renderer) {
+					window.vpw.controller = new Controller(renderer);
+				}
+			});
 	}
 
-	async createScene(table) {
+	/**
+	 * Creates a parsed table object from an uploaded .vpx.
+	 *
+	 * @param {Blob} blob
+	 * @return {Promise<Table>}
+	 */
+	async _parseBlob(blob) {
+		return await Table.load(new BrowserBinaryReader(blob));
+	}
+
+	_onVpxLoaded(table) {
+		if (!table) {
+			return;
+		}
+		return this._createScene(table).then(scene => {
+			if (!this.renderer) {
+				this.renderer = new Renderer(scene);
+				this.renderer.init();
+				this.renderer.animate();
+			}
+
+			const playfield = scene.children[0];
+			this.renderer.setPlayfield(playfield);
+			this.renderer.setPhysics(new Physics(table, this.renderer.scene, this.renderApi));
+
+			window.vpw.table = table;
+			window.vpw.physics = this.renderer.physics;
+
+			return this.renderer;
+		});
+	}
+
+	async _createScene(table) {
 		const now = Date.now();
 		const tableObj = await table.generateTableNode(this.renderApi, {
 
@@ -54,28 +101,6 @@ export class Loader {
 		return scene;
 	}
 
-	onVpxLoaded(table) {
-		if (!table) {
-			return;
-		}
-		return this.createScene(table).then(scene => {
-			if (!this.renderer) {
-				this.renderer = new Renderer(scene);
-				this.renderer.init();
-				this.renderer.animate();
-			}
-
-			const playfield = scene.children[0];
-			this.renderer.setPlayfield(playfield);
-			this.renderer.setPhysics(new Physics(table, this.renderer.scene, this.renderApi));
-
-			window.vpw.table = table;
-			window.vpw.physics = this.renderer.physics;
-
-			return this.renderer;
-		});
-	}
-
 	dropHandler(ev) {
 		console.log('File(s) dropped', ev);
 
@@ -85,20 +110,17 @@ export class Loader {
 				// If dropped items aren't files, reject them
 				if (item.kind === 'file') {
 					const file = item.getAsFile();
-					this.cache.save(file);
-					this.loadVpx(file)
-						.then(this.onVpxLoaded.bind(this))
-						.then(renderer => {
-							if (renderer) {
-								window.vpw.controller = new Controller(renderer);
-							}
-						});
+					this.cache.save(file).then(() => this.loadBlob(file));
+
+					// we only need one file
+					break;
 				}
 			}
 		} else {
 			// Use DataTransfer interface to access the file(s)
 			for (const file of ev.dataTransfer.files) {
-				this.loadVpx(file).then(this.onVpxLoaded.bind(this));
+				this.cache.save(file).then(() => this.loadBlob(file));
+				break;
 			}
 		}
 		this.dropzone.classList.remove('bg-dropzone-hover');

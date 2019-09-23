@@ -47,6 +47,7 @@
 		"webpack-bundle-analyzer": "3.5.1",
 		"webpack-cli": "3.3.9",
 		"webpack-dev-server": "3.8.1",
-		"webpack-merge": "4.2.2"
+		"webpack-merge": "4.2.2",
+		"worker-loader": "2.0.0"
 	}
 }

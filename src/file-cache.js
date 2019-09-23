@@ -12,6 +12,11 @@ export class FileCache {
 		}
 	}
 
+	/**
+	 * Saves the table to the cache.
+	 * @param {Blob} blob
+	 * @return {Promise<void>}
+	 */
 	async save(blob) {
 		if (!this.isAvailable) {
 			return Promise.resolve();
@@ -19,13 +24,17 @@ export class FileCache {
 		await this.cache.put(this.key, new Response(blob));
 	}
 
+	/**
+	 * Returns the table from the cache
+	 * @return {Promise<Blob|undefined>}
+	 */
 	async get() {
 		if (!this.isAvailable) {
-			return Promise.resolve();
+			return Promise.resolve(undefined);
 		}
 		const response = await this.cache.match(this.key);
 		if (!response) {
-			return Promise.resolve();
+			return Promise.resolve(undefined);
 		}
 		return response.blob();
 	}
