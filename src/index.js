@@ -13,12 +13,6 @@ cache.init()
 	.then(() => cache.get())
 	.then(cachedVpx => {
 		if (cachedVpx) {
-			return loader.loadVpx(cachedVpx);
-		}
-	})
-	.then(loader.onVpxLoaded.bind(loader))
-	.then(renderer => {
-		if (renderer) {
-			window.vpw.controller = new Controller(renderer);
+			return loader.loadBlob(cachedVpx);
 		}
 	});
