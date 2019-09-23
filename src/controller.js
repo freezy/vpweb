@@ -10,11 +10,11 @@ export class Controller {
 
 	key(event) {
 		//console.warn('%s %s, ctrl: %s, shift: %s', event.code, event.type, event.ctrlKey, event.shiftKey);
-		if (!this.renderer.physics) {
+		if (!this.renderer.player) {
 			return true;
 		}
 		if (!this.physics) {
-			this.physics = this.renderer.physics;
+			this.physics = this.renderer.player;
 		}
 		const down = event.type === 'keydown';
 		switch (event.code) {

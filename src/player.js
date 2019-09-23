@@ -2,13 +2,13 @@ import {Player} from '../../vpx-js/dist/lib/game/player'
 import {Table} from '../../vpx-js/dist/lib/vpt/table/table'
 import {Vertex3D} from '../../vpx-js/dist/lib/math/vertex3d'
 
-export class Physics {
+export class PlayerController {
 
 	/**
 	 * @param {Table} table
 	 * @param {Scene} scene
 	 */
-	constructor(table, scene, renderApi) {
+	constructor(blob, table, scene, renderApi) {
 		/** @type Table */
 		this.table = table;
 		this.scene = scene;
