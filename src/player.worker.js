@@ -92,7 +92,7 @@ onmessage = e => {
 	// init
 	if (e.data.blob) {
 		tableParseStart = Date.now();
-		Table.load(new BrowserBinaryReader(e.data.blob))
+		Table.load(new BrowserBinaryReader(e.data.blob), { skipMeshes: true })
 			.then(table => physicsWorker.start(table));
 	}
 
