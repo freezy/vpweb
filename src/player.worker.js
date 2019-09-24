@@ -18,7 +18,7 @@ class PlayerWorker {
 		this._table = table;
 
 		this._player = new Player(table);
-		this._player.on('ballCreated', ball => postMessage({ event: 'ballCreated', name: ball.getName(), data: ball.data }));
+		this._player.on('ballCreated', ball => postMessage({ event: 'ballCreated', data: ball.data, state: ball.getState() }));
 		this._player.on('ballDestroyed', ball => postMessage({event: 'ballDestroyed', name: ball.getName()}));
 		this._player.init();
 		this._looping = true;
@@ -65,10 +65,10 @@ class PlayerWorker {
 				this._table.flippers.RightFlipper.api.rotateToStart();
 				break;
 			case 'plungerKeyDown':
-				this._table.plungers.Plunger.api.pullBack();
+				this._table.plungers.Plunger.api.PullBack();
 				break;
 			case 'plungerKeyUp':
-				this._table.plungers.Plunger.api.fire();
+				this._table.plungers.Plunger.api.Fire();
 				break;
 			case 'popStates':
 				if (this._player) {
