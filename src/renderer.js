@@ -142,12 +142,20 @@ export class Renderer {
 		requestAnimationFrame(this.animate.bind(this));
 		this.controls.update();
 		if (this.player) {
+			this.player.popStates();
 			this.physicsStats.begin();
-			this.player.update();
-			this.physicsStats.end();
+		} else {
+			this.renderStats.begin();
+			this.renderer.render(this.scene, this.camera);
+			this.renderStats.end();
 		}
+	}
+
+	render() {
+		this.physicsStats.end();
 		this.renderStats.begin();
 		this.renderer.render(this.scene, this.camera);
 		this.renderStats.end();
+
 	}
 }
