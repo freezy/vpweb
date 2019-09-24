@@ -1,6 +1,5 @@
-import {Player} from '../../vpx-js/dist/lib/game/player'
 import {Table} from '../../vpx-js/dist/lib/vpt/table/table'
-import {Vertex3D} from '../../vpx-js/dist/lib/math/vertex3d'
+import {Ball} from '../../vpx-js/dist/lib/vpt/ball/ball'
 import Worker from 'worker-loader!./player.worker.js';
 
 
@@ -59,17 +58,18 @@ export class PlayerController {
 		switch (e.data.event) {
 			case 'ballCreated': {
 				console.log('Created ball:', e.data);
-				// const ball = e.data.ball;
-				// const name = ball.getName();
-				// ball.addToScene(this.scene, this.renderApi, this.table).then(mesh => {
-				// 	this.sceneItems[name] = mesh;
-				// 	this.tableItems[name] = ball;
-				// });
-				// this.ballName = ball.getName();
+				const ball = new Ball(e.data.data, e.data.state, 0, this.table.data);
+				const name = ball.getName();
+				ball.addToScene(this.scene, this.renderApi, this.table).then(mesh => {
+					this.sceneItems[name] = mesh;
+					this.tableItems[name] = ball;
+					ball.applyState(mesh, e.data.state, this.renderApi, this.table);
+				});
+				this.ballName = ball.getName();
 				break;
 			}
 			case 'ballDestroyed': {
-				const ball = e.data.ball;
+				const ball = this.tableItems[e.data.name];
 				console.log('Destroyed ball:', ball);
 				delete this.sceneItems[ball.getName()];
 				delete this.tableItems[ball.getName()];
