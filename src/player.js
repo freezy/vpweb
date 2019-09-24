@@ -1,61 +1,46 @@
 import {Player} from '../../vpx-js/dist/lib/game/player'
 import {Table} from '../../vpx-js/dist/lib/vpt/table/table'
 import {Vertex3D} from '../../vpx-js/dist/lib/math/vertex3d'
+import Worker from 'worker-loader!./player.worker.js';
+
 
 export class PlayerController {
 
 	/**
+	 * @param {Blob} blob
 	 * @param {Table} table
-	 * @param {Scene} scene
+	 * @param {Renderer} renderer
+	 * @param {}renderApi
 	 */
-	constructor(blob, table, scene, renderApi) {
-		/** @type Table */
-		this.table = table;
-		this.scene = scene;
-		this.renderApi = renderApi;
-		this._player = new Player(table);
-		this._player.on('ballCreated', ball => {
-			const name = ball.getName();
-			console.log('Created ball:', name);
-			ball.addToScene(this.scene, this.renderApi, this.table).then(mesh => {
-				this.sceneItems[name] = mesh;
-				this.tableItems[name] = ball;
-			});
-			this.ballName = ball.getName();
-		});
-		this._player.on('ballDestroyed', ball => {
-			console.log('Destroyed ball:', ball);
-			delete this.sceneItems[ball.getName()];
-			delete this.tableItems[ball.getName()];
-			ball.removeFromScene(this.scene, this.renderApi);
-			this.ballName = undefined;
-		});
-		this._player.init();
+	constructor(blob, table, renderer, renderApi) {
 
 		this.sceneItems = {};
 		this.tableItems = {};
 
-		const playfield = this.scene.children.find(c => c.name === 'playfield');
+		this.table = table;
+		this.scene = renderer.scene;
+		this.renderApi = renderApi;
+		this.renderer = renderer;
+		this.worker = new Worker();
+		this.worker.postMessage({ blob });
+		this.worker.onmessage = this._onMessage.bind(this);
 
 		// index scene items
+		const playfield = this.scene.children.find(c => c.name === 'playfield');
 		if (playfield) {
 			for (const itemGroup of playfield.children) {
 				for (const item of itemGroup.children) {
 					this.sceneItems[item.name] = item;
-					item.matrixAutoUpdate = false;
-					for (const meshItem of item.children) {
-						meshItem.matrixAutoUpdate = false;
-					}
 				}
 			}
 		}
 
 		// index table items
-		for (const movable of table.getMovables()) {
-			this.tableItems[movable.getName()] = movable;
+		for (const item of table.getMovables()) {
+			this.tableItems[item.getName()] = item;
 		}
-		for (const movable of table.getAnimatables()) {
-			this.tableItems[movable.getName()] = movable;
+		for (const item of table.getAnimatables()) {
+			this.tableItems[item.getName()] = item;
 		}
 
 		// index public apis
@@ -63,78 +48,71 @@ export class PlayerController {
 		window.vpw.player = this._player;
 		window.vpw.sceneItems = this.sceneItems;
 		window.vpw.tableItems = this.tableItems;
-
-		// draw hit rectangles
-		// for (const hittable of table.getHittables().filter(h => h.constructor.name === 'Flipper')) {
-		// 	for (const hitObject of hittable.getHitShapes()) {
-		// 		hitObject.calcHitBBox();
-		// 		const rect = hitObject.hitBBox;
-		//
-		// 		const boxGeometry = new BoxGeometry(rect.width, rect.height, rect.depth);
-		// 		const mat = new MeshBasicMaterial({
-		// 			color: 0xff0000,
-		// 			wireframe: true
-		// 		});
-		// 		const box = new Mesh(boxGeometry, mat);
-		// 		//const wireframe = new WireframeHelper( box, 0x00ff00 );
-		// 		box.position.set(rect.right, rect.top, -rect.zhigh);
-		//
-		// 		playfield.add(box);
-		// 		//playfield.add(wireframe);
-		// 	}
-		// }
-
-		// debug functions
-		window.vpw.createBall = function(x, y, z, vx, vy, vz) {
-			return this._player.createBall({
-				getBallCreationPosition(t) {
-					return new Vertex3D(x, y, z || 0);
-				},
-				getBallCreationVelocity(t) {
-					return new Vertex3D(vx || 0, vy || 0, vz || 0);
-				},
-				onBallCreated(p, b) {
-				},
-			});
-		}.bind(this);
 	}
 
-	update() {
-		this._player.updatePhysics();
-		const states = this._player.popStates();
-		this._updateState(states);
-		states.release();
+	_onMessage(e) {
+		if (e.data.states) {
+			this._updateState(e.data.states);
+			this.renderer.render();
+			return;
+		}
+		switch (e.data.event) {
+			case 'ballCreated': {
+				console.log('Created ball:', e.data);
+				// const ball = e.data.ball;
+				// const name = ball.getName();
+				// ball.addToScene(this.scene, this.renderApi, this.table).then(mesh => {
+				// 	this.sceneItems[name] = mesh;
+				// 	this.tableItems[name] = ball;
+				// });
+				// this.ballName = ball.getName();
+				break;
+			}
+			case 'ballDestroyed': {
+				const ball = e.data.ball;
+				console.log('Destroyed ball:', ball);
+				delete this.sceneItems[ball.getName()];
+				delete this.tableItems[ball.getName()];
+				ball.removeFromScene(this.scene, this.renderApi);
+				this.ballName = undefined;
+				break;
+			}
+		}
+	}
+
+	popStates() {
+		this.worker.postMessage({ event: 'popStates' });
 	}
 
 	leftFlipperKeyDown() {
 		this.keyDownTime = performance.now();
-		this.table.flippers.LeftFlipper.getApi().rotateToEnd();
+		this.worker.postMessage({event: 'leftFlipperKeyDown'});
 		return true;
 	}
 
 	leftFlipperKeyUp() {
-		this.table.flippers.LeftFlipper.getApi().rotateToStart();
+		this.worker.postMessage({event: 'leftFlipperKeyUp'});
 		return true;
 	}
 
 	rightFlipperKeyDown() {
 		this.keyDownTime = performance.now();
-		this.table.flippers.RightFlipper.getApi().rotateToEnd();
+		this.worker.postMessage({event: 'rightFlipperKeyDown'});
 		return true;
 	}
 
 	rightFlipperKeyUp() {
-		this.table.flippers.RightFlipper.getApi().rotateToStart();
+		this.worker.postMessage({event: 'rightFlipperKeyUp'});
 		return true;
 	}
 
 	plungerKeyDown() {
-		this.table.plungers.Plunger.pullBack();
+		this.worker.postMessage({event: 'plungerKeyDown'});
 		return true;
 	}
 
 	plungerKeyUp() {
-		this.table.plungers.Plunger.fire();
+		this.worker.postMessage({event: 'plungerKeyUp'});
 		return true;
 	}
 
@@ -149,18 +127,17 @@ export class PlayerController {
 	 */
 	_updateState(states) {
 
-		if (this.ballName && !states.keys.includes(this.ballName)) {
+		if (this.ballName && !Object.keys(states).includes(this.ballName)) {
 			console.warn('Ball did not move!');
 		}
-		for (const name of states.keys) {
-			const state = states.getState(name).newState;
-			if (!this.sceneItems[state.getName()]) {
-				//console.warn('No scene item called %s found!', state.getName(), states);
-				break;
+		for (const name of Object.keys(states)) {
+			if (!this.sceneItems[name]) {
+				//console.warn('No scene item called %s found!', name, states);
+				continue;
 			}
-			if (!this.tableItems[state.getName()]) {
-				console.warn('No table item called %s found!', state.getName(), states);
-				break;
+			if (!this.tableItems[name]) {
+				console.warn('No table item called %s found!', name, states);
+				continue;
 			}
 
 			if (this.keyDownTime) {
@@ -168,9 +145,9 @@ export class PlayerController {
 				//console.debug('[Latency] = %sms', Math.round(lat * 1000) / 1000);
 				this.keyDownTime = undefined;
 			}
-			const tableItem = this.tableItems[state.getName()];
-			const sceneItem = this.sceneItems[state.getName()];
-			tableItem.applyState(sceneItem, this.renderApi, this.table, this._player, states.getState(name).oldState);
+			const tableItem = this.tableItems[name];
+			const sceneItem = this.sceneItems[name];
+			tableItem.applyState(sceneItem, states[name].newState, this.renderApi, this.table, states[name].oldState);
 		}
 	}
 }

@@ -83,7 +83,6 @@ export class Loader {
 		if (!playfield) {
 			return;
 		}
-
 		if (!this.renderer) {
 			this.renderer = new Renderer();
 			this.renderer.init();
@@ -94,7 +93,7 @@ export class Loader {
 
 	_setupPlayer(blob, table) {
 		if (blob && table && this.renderer) {
-			this.renderer.setPlayer(new PlayerController(blob, table, this.renderer.scene, this.renderApi));
+			this.renderer.setPlayer(new PlayerController(blob, table, this.renderer, this.renderApi));
 		}
 	}
 
