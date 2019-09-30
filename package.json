@@ -28,7 +28,7 @@
 		"three": "0.108.0"
 	},
 	"devDependencies": {
-		"acorn": "7.0.0",
+		"acorn": "7.1.0",
 		"autoprefixer": "9.6.1",
 		"copy-webpack-plugin": "5.0.4",
 		"cross-env": "6.0.0",
