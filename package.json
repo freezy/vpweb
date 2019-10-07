@@ -25,7 +25,7 @@
 	"dependencies": {
 		"bootstrap": "4.3.1",
 		"stats.js": "0.17.0",
-		"three": "0.108.0"
+		"three": "0.109.0"
 	},
 	"devDependencies": {
 		"acorn": "7.0.0",
