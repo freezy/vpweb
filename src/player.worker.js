@@ -3,7 +3,9 @@ import {Player} from '../../vpx-js/dist/lib/game/player'
 import {BrowserBinaryReader} from '../../vpx-js/dist/lib/io/binary-reader.browser';
 
 let tableParseStart = 0;
-
+self.vpw = {
+	showNumCycles: false,
+};
 class PlayerWorker {
 
 	constructor() {
@@ -24,15 +26,26 @@ class PlayerWorker {
 		this._looping = true;
 
 		// set some debugging globals
-		self.vpw = {};
 		self.vpw.tableItems = {};
 		for (const item of [ ...table.getMovables(), ...table.getAnimatables() ]) {
 			self.vpw.tableItems[item.getName()] = item;
 		}
 		self.vpw.items = table.getElementApis();
 
+		let numCalls = 0;
+		let numCycles = 0;
+		let time = performance.now();
 		do {
-			await this._work();
+			numCycles += await this._work();
+			numCalls++;
+			if (performance.now() - time > 1000) {
+				if (self.vpw.showNumCycles) {
+					console.log('[PlayerWorker] %s cycles/s at %s calls /s', numCycles, numCalls);
+				}
+				time = performance.now();
+				numCycles = 0;
+				numCalls = 0;
+			}
 
 		} while (this._looping);
 	}
@@ -44,8 +57,7 @@ class PlayerWorker {
 
 	_work() {
 		return new Promise(resolve => setTimeout(() => {
-			this._player.updatePhysics();
-			resolve();
+			resolve(this._player.updatePhysics());
 		}, 0));
 	}
 
@@ -92,7 +104,7 @@ onmessage = e => {
 	// init
 	if (e.data.blob) {
 		tableParseStart = Date.now();
-		Table.load(new BrowserBinaryReader(e.data.blob), { skipMeshes: true })
+		Table.load(new BrowserBinaryReader(e.data.blob))
 			.then(table => physicsWorker.start(table));
 	}
 

@@ -58,7 +58,7 @@ export class PlayerController {
 		switch (e.data.event) {
 			case 'ballCreated': {
 				console.log('Created ball:', e.data);
-				const ball = new Ball(e.data.data, e.data.state, 0, this.table.data);
+				const ball = new Ball(e.data.data, e.data.state, 0, null, this.table);
 				const name = ball.getName();
 				ball.addToScene(this.scene, this.renderApi, this.table).then(mesh => {
 					this.sceneItems[name] = mesh;
@@ -146,7 +146,7 @@ export class PlayerController {
 				this.keyDownTime = undefined;
 			}
 			const tableItem = this.tableItems[name];
-			const sceneItem = this.sceneItems[name];
+			const sceneItem = this.sceneItems['light:' + name] || this.sceneItems[name];
 			tableItem.applyState(sceneItem, states[name].newState, this.renderApi, this.table, states[name].oldState);
 		}
 	}
