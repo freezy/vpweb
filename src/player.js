@@ -35,10 +35,7 @@ export class PlayerController {
 		}
 
 		// index table items
-		for (const item of table.getMovables()) {
-			this.tableItems[item.getName()] = item;
-		}
-		for (const item of table.getAnimatables()) {
+		for (const item of table.getRenderables()) {
 			this.tableItems[item.getName()] = item;
 		}
 
@@ -63,7 +60,7 @@ export class PlayerController {
 				ball.addToScene(this.scene, this.renderApi, this.table).then(mesh => {
 					this.sceneItems[name] = mesh;
 					this.tableItems[name] = ball;
-					ball.applyState(mesh, e.data.state, this.renderApi, this.table);
+					ball.getUpdater().applyState(mesh, e.data.state, this.renderApi, this.table);
 				});
 				this.ballName = ball.getName();
 				break;
@@ -147,7 +144,7 @@ export class PlayerController {
 			}
 			const tableItem = this.tableItems[name];
 			const sceneItem = this.sceneItems['light:' + name] || this.sceneItems[name];
-			tableItem.applyState(sceneItem, states[name].newState, this.renderApi, this.table, states[name].oldState);
+			tableItem.getUpdater().applyState(sceneItem, states[name].newState, this.renderApi, this.table);
 		}
 	}
 }
