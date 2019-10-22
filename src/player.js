@@ -9,7 +9,7 @@ export class PlayerController {
 	 * @param {Blob} blob
 	 * @param {Table} table
 	 * @param {Renderer} renderer
-	 * @param {}renderApi
+	 * @param {} renderApi
 	 */
 	constructor(blob, table, renderer, renderApi) {
 
@@ -119,7 +119,6 @@ export class PlayerController {
 
 	/**
 	 * Updates the scene according to the changed states.
-	 * @param {ChangedStates} states
 	 * @private
 	 */
 	_updateState(states) {
@@ -144,7 +143,7 @@ export class PlayerController {
 			}
 			const tableItem = this.tableItems[name];
 			const sceneItem = this.sceneItems['light:' + name] || this.sceneItems[name];
-			tableItem.getUpdater().applyState(sceneItem, states[name].newState, this.renderApi, this.table);
+			tableItem.getUpdater().applyState(sceneItem, states[name], this.renderApi, this.table);
 		}
 	}
 }
