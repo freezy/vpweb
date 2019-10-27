@@ -81,37 +81,45 @@ export class PlayerController {
 		this.worker.postMessage({ event: 'popStates' });
 	}
 
-	leftFlipperKeyDown() {
-		this.keyDownTime = performance.now();
-		this.worker.postMessage({event: 'leftFlipperKeyDown'});
-		return true;
+	keyDown(event) {
+		this.worker.postMessage({ event: 'keyDown', data: { code: event.code, key: event.key, ts: Date.now() } });
 	}
 
-	leftFlipperKeyUp() {
-		this.worker.postMessage({event: 'leftFlipperKeyUp'});
-		return true;
+	keyUp(event) {
+		this.worker.postMessage({ event: 'keyUp', data: { code: event.code, key: event.key, ts: Date.now() } });
 	}
 
-	rightFlipperKeyDown() {
-		this.keyDownTime = performance.now();
-		this.worker.postMessage({event: 'rightFlipperKeyDown'});
-		return true;
-	}
-
-	rightFlipperKeyUp() {
-		this.worker.postMessage({event: 'rightFlipperKeyUp'});
-		return true;
-	}
-
-	plungerKeyDown() {
-		this.worker.postMessage({event: 'plungerKeyDown'});
-		return true;
-	}
-
-	plungerKeyUp() {
-		this.worker.postMessage({event: 'plungerKeyUp'});
-		return true;
-	}
+	// leftFlipperKeyDown() {
+	// 	this.keyDownTime = performance.now();
+	// 	this.worker.postMessage({event: 'leftFlipperKeyDown'});
+	// 	return true;
+	// }
+	//
+	// leftFlipperKeyUp() {
+	// 	this.worker.postMessage({event: 'leftFlipperKeyUp'});
+	// 	return true;
+	// }
+	//
+	// rightFlipperKeyDown() {
+	// 	this.keyDownTime = performance.now();
+	// 	this.worker.postMessage({event: 'rightFlipperKeyDown'});
+	// 	return true;
+	// }
+	//
+	// rightFlipperKeyUp() {
+	// 	this.worker.postMessage({event: 'rightFlipperKeyUp'});
+	// 	return true;
+	// }
+	//
+	// plungerKeyDown() {
+	// 	this.worker.postMessage({event: 'plungerKeyDown'});
+	// 	return true;
+	// }
+	//
+	// plungerKeyUp() {
+	// 	this.worker.postMessage({event: 'plungerKeyUp'});
+	// 	return true;
+	// }
 
 	createBall() {
 		const ball = this._player.createBall(this.table.kickers.BallRelease);

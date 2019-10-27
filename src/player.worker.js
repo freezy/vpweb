@@ -61,26 +61,36 @@ class PlayerWorker {
 		}, 0));
 	}
 
-	onEvent(name) {
-		//console.log(name);
+	onEvent(name, data) {
+		console.log(name, data);
 		switch (name) {
-			case 'leftFlipperKeyDown':
-				this._table.flippers.LeftFlipper.api.rotateToEnd();
+			// case 'leftFlipperKeyDown':
+			// 	this._table.flippers.LeftFlipper.api.rotateToEnd();
+			// 	break;
+			// case 'leftFlipperKeyUp':
+			// 	this._table.flippers.LeftFlipper.api.rotateToStart();
+			// 	break;
+			// case 'rightFlipperKeyDown':
+			// 	this._table.flippers.RightFlipper.api.rotateToEnd();
+			// 	break;
+			// case 'rightFlipperKeyUp':
+			// 	this._table.flippers.RightFlipper.api.rotateToStart();
+			// 	break;
+			// case 'plungerKeyDown':
+			// 	this._table.plungers.Plunger.api.PullBack();
+			// 	break;
+			// case 'plungerKeyUp':
+			// 	this._table.plungers.Plunger.api.Fire();
+			// 	break;
+			case 'keyDown':
+				if (this._player) {
+					this._player.onKeyDown(data);
+				}
 				break;
-			case 'leftFlipperKeyUp':
-				this._table.flippers.LeftFlipper.api.rotateToStart();
-				break;
-			case 'rightFlipperKeyDown':
-				this._table.flippers.RightFlipper.api.rotateToEnd();
-				break;
-			case 'rightFlipperKeyUp':
-				this._table.flippers.RightFlipper.api.rotateToStart();
-				break;
-			case 'plungerKeyDown':
-				this._table.plungers.Plunger.api.PullBack();
-				break;
-			case 'plungerKeyUp':
-				this._table.plungers.Plunger.api.Fire();
+			case 'keyUp':
+				if (this._player) {
+					this._player.onKeyUp(data);
+				}
 				break;
 			case 'popStates':
 				if (this._player) {
@@ -109,6 +119,6 @@ onmessage = e => {
 	}
 
 	if (e.data.event) {
-		physicsWorker.onEvent(e.data.event);
+		physicsWorker.onEvent(e.data.event, e.data.data);
 	}
 };
