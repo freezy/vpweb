@@ -16,29 +16,35 @@ export class Controller {
 		if (!this.physics) {
 			this.physics = this.renderer.player;
 		}
+
 		const down = event.type === 'keydown';
-		switch (event.code) {
-
-			case 'ControlLeft':
-			case 'ShiftLeft':
-				return down ? this.physics.leftFlipperKeyDown() : this.physics.leftFlipperKeyUp();
-
-			case 'ControlRight':
-			case 'ShiftRight':
-				return down ? this.physics.rightFlipperKeyDown() : this.physics.rightFlipperKeyUp();
-
-			case 'Enter':
-				return down ? this.physics.plungerKeyDown() : this.physics.plungerKeyUp();
-
-			case 'KeyB':
-				if (down) {
-					return this.physics.createBall();
-				}
-
-			default:
-				console.log(event.type, event.code);
-				break;
+		if (down) {
+			this.physics.keyDown(event);
+		} else {
+			this.physics.keyUp(event);
 		}
+		// switch (event.code) {
+		//
+		// 	case 'ControlLeft':
+		// 	case 'ShiftLeft':
+		// 		return down ? this.physics.leftFlipperKeyDown() : this.physics.leftFlipperKeyUp();
+		//
+		// 	case 'ControlRight':
+		// 	case 'ShiftRight':
+		// 		return down ? this.physics.rightFlipperKeyDown() : this.physics.rightFlipperKeyUp();
+		//
+		// 	case 'Enter':
+		// 		return down ? this.physics.plungerKeyDown() : this.physics.plungerKeyUp();
+		//
+		// 	case 'KeyB':
+		// 		if (down) {
+		// 			return this.physics.createBall();
+		// 		}
+		//
+		// 	default:
+		// 		console.log(event.type, event.code);
+		// 		break;
+		// }
 		return false;
 	}
 }
