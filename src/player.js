@@ -131,9 +131,9 @@ export class PlayerController {
 	 */
 	_updateState(states) {
 
-		if (this.ballName && !Object.keys(states).includes(this.ballName)) {
-			console.warn('Ball did not move!');
-		}
+		// if (this.ballName && !Object.keys(states).includes(this.ballName)) {
+		// 	console.warn('Ball did not move!');
+		// }
 		for (const name of Object.keys(states)) {
 			if (!this.sceneItems[name]) {
 				//console.warn('No scene item called %s found!', name, states);
