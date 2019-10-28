@@ -62,7 +62,7 @@ class PlayerWorker {
 	}
 
 	onEvent(name, data) {
-		console.log(name, data);
+		// console.log(name, data);
 		switch (name) {
 			// case 'leftFlipperKeyDown':
 			// 	this._table.flippers.LeftFlipper.api.rotateToEnd();
