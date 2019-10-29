@@ -17,12 +17,13 @@ class PlayerWorker {
 	async start(table) {
 		console.log('[PlayerWorker.start] Worker parsed table in %sms', Date.now() - tableParseStart);
 
+		self.vpw.scope = {};
 		this._table = table;
 
 		this._player = new Player(table);
 		this._player.on('ballCreated', ball => postMessage({ event: 'ballCreated', data: ball.data, state: ball.getState() }));
 		this._player.on('ballDestroyed', ball => postMessage({event: 'ballDestroyed', name: ball.getName()}));
-		this._player.init();
+		this._player.init(self.vpw.scope);
 		this._looping = true;
 
 		// set some debugging globals

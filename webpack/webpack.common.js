@@ -12,12 +12,16 @@ module.exports = () => {
 				template: 'src/index.html',
 				minify: true,
 			}),
-			new webpack.ProvidePlugin({
-				__alloc__: resolve('./webpack/alloc-log-collector'),
-			}),
+			// new webpack.ProvidePlugin({
+			// 	__alloc__: resolve('./webpack/alloc-log-collector'),
+			// }),
 		],
 		module: {
 			rules: [
+				{
+					test: /\.vbs$/i,
+					use: 'raw-loader',
+				},
 				{
 					test: /\.(scss|sass)$/,
 					use: [{

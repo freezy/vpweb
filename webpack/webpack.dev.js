@@ -7,7 +7,7 @@ module.exports = function(options) {
 		mode: 'development',
 		module: {
 			rules: [
-				{ test: /\.js$/, use: [{ loader: resolve('./webpack/alloc-log-loader'), }]},
+				//{ test: /\.js$/, use: [{ loader: resolve('./webpack/alloc-log-loader'), }]},
 			],
 		},
 	});
