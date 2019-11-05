@@ -65,24 +65,6 @@ class PlayerWorker {
 	onEvent(name, data) {
 		// console.log(name, data);
 		switch (name) {
-			// case 'leftFlipperKeyDown':
-			// 	this._table.flippers.LeftFlipper.api.rotateToEnd();
-			// 	break;
-			// case 'leftFlipperKeyUp':
-			// 	this._table.flippers.LeftFlipper.api.rotateToStart();
-			// 	break;
-			// case 'rightFlipperKeyDown':
-			// 	this._table.flippers.RightFlipper.api.rotateToEnd();
-			// 	break;
-			// case 'rightFlipperKeyUp':
-			// 	this._table.flippers.RightFlipper.api.rotateToStart();
-			// 	break;
-			// case 'plungerKeyDown':
-			// 	this._table.plungers.Plunger.api.PullBack();
-			// 	break;
-			// case 'plungerKeyUp':
-			// 	this._table.plungers.Plunger.api.Fire();
-			// 	break;
 			case 'keyDown':
 				if (this._player) {
 					this._player.onKeyDown(data);
@@ -97,6 +79,9 @@ class PlayerWorker {
 				if (this._player) {
 					const states = this._player.popStates();
 					postMessage({ states: states.changedStates });
+					if (this._player.hasDmd()) {
+						postMessage({ dmd: this._player.getDmdFrame(), dim: this._player.getDmdDimensions() })
+					}
 					states.release();
 				}
 				break;

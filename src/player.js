@@ -2,6 +2,15 @@ import {Table} from '../../vpx-js/dist/lib/vpt/table/table'
 import {Ball} from '../../vpx-js/dist/lib/vpt/ball/ball'
 import Worker from 'worker-loader!./player.worker.js';
 
+const CANVAS_HEIGHT = 96;
+const CANVAS_WIDTH = 384;
+const GRID_SIZE = 3;
+const KOL = [
+	'rgb(64,10,0)',
+	'rgba(129,37,0,0.83)',
+	'rgb(152,47,0)',
+	'rgb(255,68,0)',
+];
 
 export class PlayerController {
 
@@ -44,12 +53,20 @@ export class PlayerController {
 		window.vpw.player = this._player;
 		window.vpw.sceneItems = this.sceneItems;
 		window.vpw.tableItems = this.tableItems;
+
+		const canvas = document.getElementById('dmd');
+		canvas.setAttribute('style', 'display:block');
+		this.canvasContext = canvas.getContext('2d');
 	}
 
 	_onMessage(e) {
 		if (e.data.states) {
 			this._updateState(e.data.states);
 			this.renderer.render();
+			return;
+		}
+		if (e.data.dmd) {
+			this._updateDmd(e.data.dmd, e.data.dim);
 			return;
 		}
 		switch (e.data.event) {
@@ -89,38 +106,6 @@ export class PlayerController {
 		this.worker.postMessage({ event: 'keyUp', data: { code: event.code, key: event.key, ts: Date.now() } });
 	}
 
-	// leftFlipperKeyDown() {
-	// 	this.keyDownTime = performance.now();
-	// 	this.worker.postMessage({event: 'leftFlipperKeyDown'});
-	// 	return true;
-	// }
-	//
-	// leftFlipperKeyUp() {
-	// 	this.worker.postMessage({event: 'leftFlipperKeyUp'});
-	// 	return true;
-	// }
-	//
-	// rightFlipperKeyDown() {
-	// 	this.keyDownTime = performance.now();
-	// 	this.worker.postMessage({event: 'rightFlipperKeyDown'});
-	// 	return true;
-	// }
-	//
-	// rightFlipperKeyUp() {
-	// 	this.worker.postMessage({event: 'rightFlipperKeyUp'});
-	// 	return true;
-	// }
-	//
-	// plungerKeyDown() {
-	// 	this.worker.postMessage({event: 'plungerKeyDown'});
-	// 	return true;
-	// }
-	//
-	// plungerKeyUp() {
-	// 	this.worker.postMessage({event: 'plungerKeyUp'});
-	// 	return true;
-	// }
-
 	createBall() {
 		const ball = this._player.createBall(this.table.kickers.BallRelease);
 	}
@@ -150,8 +135,35 @@ export class PlayerController {
 				this.keyDownTime = undefined;
 			}
 			const tableItem = this.tableItems[name];
-			const sceneItem = this.sceneItems['light:' + name] || this.sceneItems[name];
+			const sceneItem = this.sceneItems[name];
 			tableItem.getUpdater().applyState(sceneItem, states[name], this.renderApi, this.table);
+		}
+	}
+
+	_updateDmd(frame, dim) {
+		this.canvasContext.fillStyle = 'black';
+		this.canvasContext.fillRect(0, 0, CANVAS_WIDTH + 2, CANVAS_HEIGHT + 2);
+		let offsetX = 1;
+		let offsetY = 1;
+		let color = 0;
+		for (let i = 0; i < frame.length; i++) {
+			if (frame[i] > 0) {
+				if (color !== frame[i]) {
+					color = frame[i];
+					this.canvasContext.fillStyle = KOL[color];
+				}
+				this.canvasContext.fillRect(
+					offsetX * GRID_SIZE,
+					offsetY * GRID_SIZE,
+					GRID_SIZE,
+					GRID_SIZE
+				);
+			}
+			offsetX++;
+			if (offsetX === dim._x) {
+				offsetX = 0;
+				offsetY++;
+			}
 		}
 	}
 }
