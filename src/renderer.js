@@ -1,12 +1,17 @@
 import {
-	AmbientLight, BasicShadowMap,
+	AmbientLight,
 	DirectionalLight,
-	PCFSoftShadowMap,
-	PerspectiveCamera,
+	PerspectiveCamera, ReinhardToneMapping,
 	Scene,
-	Vector3, VSMShadowMap,
+	Vector2,
+	Vector3,
+	VSMShadowMap,
 	WebGLRenderer
 } from 'three';
+import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import {RenderPass} from 'three/examples/jsm/postprocessing/RenderPass.js';
+import {UnrealBloomPass} from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+import {GUI} from 'three/examples/jsm/libs/dat.gui.module'
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import Stats from 'stats.js/src/Stats';
 
@@ -24,7 +29,10 @@ export class Renderer {
 		this._initControls();
 		this._initLights();
 		this._resetCamera();
-		document.getElementById('top-container').classList.add('d-none')
+		this._initGui();
+		this._initEffects();
+
+		document.getElementById('top-container').classList.add('d-none');
 	}
 
 	setPlayfield(playfield) {
@@ -75,6 +83,7 @@ export class Renderer {
 		});
 		this.renderer.shadowMap.enabled = true;
 		this.renderer.shadowMap.type = VSMShadowMap;
+		//this.renderer.toneMapping = ReinhardToneMapping;
 		this.renderer.setPixelRatio(window.devicePixelRatio);
 		this.renderer.setSize(window.innerWidth, window.innerHeight);
 		window.addEventListener('resize', this.onWindowResize.bind(this), false);
@@ -119,6 +128,31 @@ export class Renderer {
 		this.scene.add(this.directionalLightBack);
 	}
 
+	_initGui() {
+		this.params = {
+			exposure: 1,
+			bloomStrength: 1.5,
+			bloomThreshold: 0,
+			bloomRadius: 0
+		};
+		this.gui = new GUI();
+		this.gui.add(this.params, 'exposure', 0.1, 2).onChange(value =>  this.renderer.toneMappingExposure = Math.pow(value, 4.0));
+		this.gui.add(this.params, 'bloomThreshold', 0.0, 1.0).onChange(value => this.bloomPass.threshold = Number(value));
+		this.gui.add(this.params, 'bloomStrength', 0.0, 3.0).onChange(value => this.bloomPass.strength = Number(value));
+		this.gui.add(this.params, 'bloomRadius', 0.0, 1.0).step(0.01).onChange(value => this.bloomPass.radius = Number(value));
+	}
+
+	_initEffects() {
+		const renderScene = new RenderPass(this.scene, this.camera);
+		this.bloomPass = new UnrealBloomPass(new Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
+		this.bloomPass.threshold = this.params.bloomThreshold;
+		this.bloomPass.strength = this.params.bloomStrength;
+		this.bloomPass.radius = this.params.bloomRadius;
+		this.composer = new EffectComposer(this.renderer);
+		this.composer.addPass(renderScene);
+		this.composer.addPass(this.bloomPass);
+	}
+
 	_resetCamera() {
 		this.camera.position.copy(this.cameraDefaults.posCamera);
 		this.cameraTarget.copy(this.cameraDefaults.posCameraTarget);
@@ -136,6 +170,7 @@ export class Renderer {
 		this.camera.aspect = window.innerWidth / window.innerHeight;
 		this.camera.updateProjectionMatrix();
 		this.renderer.setSize(window.innerWidth, window.innerHeight);
+		this.composer.setSize(window.innerWidth, window.innerHeight);
 	}
 
 	animate() {
@@ -146,7 +181,8 @@ export class Renderer {
 			this.physicsStats.begin();
 		} else {
 			this.renderStats.begin();
-			this.renderer.render(this.scene, this.camera);
+			this.composer.render();
+			//this.renderer.render(this.scene, this.camera);
 			this.renderStats.end();
 		}
 	}
@@ -154,7 +190,8 @@ export class Renderer {
 	render() {
 		this.physicsStats.end();
 		this.renderStats.begin();
-		this.renderer.render(this.scene, this.camera);
+		this.composer.render();
+		//this.renderer.render(this.scene, this.camera);
 		this.renderStats.end();
 
 	}
