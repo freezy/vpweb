@@ -131,14 +131,14 @@ export class Renderer {
 	_initGui() {
 		this.params = {
 			exposure: 1,
-			bloomStrength: 1.5,
-			bloomThreshold: 0,
-			bloomRadius: 0
+			bloomStrength: 0.55,
+			bloomThreshold: 0.33,
+			bloomRadius: 1,
 		};
 		this.gui = new GUI();
-		this.gui.add(this.params, 'exposure', 0.1, 2).onChange(value =>  this.renderer.toneMappingExposure = Math.pow(value, 4.0));
-		this.gui.add(this.params, 'bloomThreshold', 0.0, 1.0).onChange(value => this.bloomPass.threshold = Number(value));
-		this.gui.add(this.params, 'bloomStrength', 0.0, 3.0).onChange(value => this.bloomPass.strength = Number(value));
+		this.gui.add(this.params, 'exposure', 0.1, 2, 0.01).onChange(value =>  this.renderer.toneMappingExposure = Math.pow(value, 4.0));
+		this.gui.add(this.params, 'bloomThreshold', 0.0, 1.0, 0.01).onChange(value => this.bloomPass.threshold = Number(value));
+		this.gui.add(this.params, 'bloomStrength', 0.0, 3.0, 0.01).onChange(value => this.bloomPass.strength = Number(value));
 		this.gui.add(this.params, 'bloomRadius', 0.0, 1.0).step(0.01).onChange(value => this.bloomPass.radius = Number(value));
 	}
 
