@@ -1,4 +1,6 @@
 // bootstrap
+$theme-colors: ("primary": #C23E00)
+
 @import "~bootstrap/scss/_functions.scss"
 @import "~bootstrap/scss/_variables.scss"
 @import "~bootstrap/scss/_mixins.scss"
@@ -37,7 +39,6 @@
 @import "~bootstrap/scss/_utilities.scss"
 @import "~bootstrap/scss/_print.scss"
 
-
 body,html
 	height: 100%
 body
@@ -52,6 +53,16 @@ canvas#dmd
 	left: 82px
 	background-color: #151515
 	display: none
+
+#emu-buttons
+	position: absolute
+	left: 0
+	top: 100px
+	background-color: #151515
+	display: none
+
+.btn.btn-w1
+	width: 50px
 
 .dropzone .jumbotron *
 	pointer-events: none

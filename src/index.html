@@ -7,6 +7,21 @@
 </head>
 <body onkeydown="vpw.controller.key(event)" onkeyup="vpw.controller.key(event)">
 <canvas id="dmd" width="386" height="98"></canvas>
+<div id="emu-buttons">
+	<div class="container p-0">
+		<div class="row m-2">
+			<button class="btn btn-primary btn-sm btn-w1 mr-2" onclick="vpw.controller.setCabinetInput(16);">ESC</button>
+			<button class="btn btn-primary btn-sm btn-w1" onclick="vpw.controller.setCabinetInput(128);">OK</button>
+		</div>
+		<div class="row m-2">
+			<button class="btn btn-primary btn-sm btn-w1 mr-2" onclick="vpw.controller.setCabinetInput(32);">&ndash;</button>
+			<button class="btn btn-primary btn-sm btn-w1" onclick="vpw.controller.setCabinetInput(64);">+</button>
+		</div>
+		<div class="row m-2">
+			<button class="btn btn-primary btn-sm w-100" onclick="vpw.controller.setInput(22);">Coin Door</button>
+		</div>
+	</div>
+</div>
 <div id="top-container" class="h-100">
 	<div class="row align-items-center h-100">
 		<div class="col-6 mx-auto dropzone" ondrop="vpw.loader.dropHandler(event)" ondragenter="vpw.loader.dragEnterHandler(event)" ondragleave="vpw.loader.dragLeaveHandler(event)" ondragover="vpw.loader.dragOverHandler(event)">

@@ -75,6 +75,16 @@ class PlayerWorker {
 					this._player.onKeyUp(data);
 				}
 				break;
+			case 'setCabinetInput':
+				if (this._player) {
+					this._player.setCabinetInput(data.keyNr);
+				}
+				break;
+			case 'setSwitchInput':
+				if (this._player) {
+					this._player.setSwitchInput(data.switchNr, data.optionalEnableSwitch);
+				}
+				break;
 			case 'popStates':
 				if (this._player) {
 					const states = this._player.popStates();
