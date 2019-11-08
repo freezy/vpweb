@@ -1,17 +1,8 @@
-
 import {GUI} from 'three/examples/jsm/libs/dat.gui.module'
 import {Table} from '../../vpx-js/dist/lib/vpt/table/table'
 import {Ball} from '../../vpx-js/dist/lib/vpt/ball/ball'
 import Worker from 'worker-loader!./player.worker.js';
-import {
-	AdditiveBlending,
-	Blending,
-	Color,
-	MultiplyBlending,
-	NoBlending,
-	NormalBlending,
-	SubtractiveBlending
-} from "three";
+import {AdditiveBlending, Color, MultiplyBlending, NoBlending, NormalBlending, SubtractiveBlending} from "three";
 
 const CANVAS_HEIGHT = 96;
 const CANVAS_WIDTH = 384;
@@ -112,6 +103,11 @@ export class PlayerController {
 			return;
 		}
 
+		// physics loop cycles count
+		if (e.data.cpf) {
+			this.renderer._updateCps(e.data.cpf);
+		}
+
 		// ball events
 		switch (e.data.event) {
 			case 'ballCreated': {
@@ -138,8 +134,8 @@ export class PlayerController {
 		}
 	}
 
-	popStates() {
-		this.worker.postMessage({ event: 'popStates' });
+	onFrame() {
+		this.worker.postMessage({ event: 'onFrame' });
 	}
 
 	keyDown(event) {

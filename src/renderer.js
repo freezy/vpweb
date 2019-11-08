@@ -1,14 +1,6 @@
-import {
-	AmbientLight, BasicShadowMap,
-	DirectionalLight,
-	PCFSoftShadowMap,
-	PerspectiveCamera,
-	Scene,
-	Vector3, VSMShadowMap,
-	WebGLRenderer
-} from 'three';
+import {AmbientLight, DirectionalLight, PerspectiveCamera, Scene, Vector3, VSMShadowMap, WebGLRenderer} from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
-import Stats from 'stats.js/src/Stats';
+import Stats from './stats.js';
 
 export class Renderer {
 
@@ -60,11 +52,15 @@ export class Renderer {
 
 	_initStats() {
 		this.renderStats = new Stats();
-		this.physicsStats = new Stats();
-		this.physicsStats.dom.style.cssText = 'position:fixed;top:50px;left:0;cursor:pointer;opacity:0.9;z-index:10000';
-		this.physicsStats.showPanel(1);
+		this.physicsLagStats = new Stats();
+		this.physicsLagStats.dom.style.cssText = 'position:fixed;top:50px;left:0;cursor:pointer;opacity:0.9;z-index:10000';
+		this.physicsLagStats.showPanel(1);
+		this.physicsCpsStats = new Stats('FPS', '#ff6700', '#250d00');
+		this.physicsCpsStats.dom.style.cssText = 'position:fixed;top:100px;left:0;cursor:pointer;opacity:0.9;z-index:10000';
+		this.physicsCpsStats.showPanel(0);
 		document.body.appendChild(this.renderStats.dom);
-		document.body.appendChild(this.physicsStats.dom);
+		document.body.appendChild(this.physicsLagStats.dom);
+		document.body.appendChild(this.physicsCpsStats.dom);
 	}
 
 	_initRenderer() {
@@ -126,6 +122,10 @@ export class Renderer {
 		this._updateCamera();
 	}
 
+	_updateCps(numCycles) {
+		this.physicsCpsStats.set(numCycles);
+	}
+
 	_updateCamera() {
 		this.camera.aspect = window.innerWidth / window.innerHeight;
 		this.camera.lookAt(this.cameraTarget);
@@ -142,8 +142,8 @@ export class Renderer {
 		requestAnimationFrame(this.animate.bind(this));
 		this.controls.update();
 		if (this.player) {
-			this.player.popStates();
-			this.physicsStats.begin();
+			this.player.onFrame();
+			this.physicsLagStats.begin();
 		} else {
 			this.renderStats.begin();
 			this.renderer.render(this.scene, this.camera);
@@ -152,7 +152,7 @@ export class Renderer {
 	}
 
 	render() {
-		this.physicsStats.end();
+		this.physicsLagStats.end();
 		this.renderStats.begin();
 		this.renderer.render(this.scene, this.camera);
 		this.renderStats.end();

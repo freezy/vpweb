@@ -9,6 +9,13 @@ self.vpw = {
 class PlayerWorker {
 
 	constructor() {
+		this.totalCycles = 0;
+		this.numCycles = 0;
+		setInterval(() => {
+			postMessage({ cpf: this.numCycles - this.totalCycles });
+			this.totalCycles = this.numCycles;
+			this.numCycles = 0;
+		}, 1000);
 	}
 
 	/**
@@ -34,17 +41,15 @@ class PlayerWorker {
 		self.vpw.items = table.getElementApis();
 
 		let numCalls = 0;
-		let numCycles = 0;
 		let time = performance.now();
 		do {
-			numCycles += await this._work();
+			this.numCycles += await this._work();
 			numCalls++;
 			if (performance.now() - time > 1000) {
 				if (self.vpw.showNumCycles) {
-					console.log('[PlayerWorker] %s cycles/s at %s calls /s', numCycles, numCalls);
+					console.log('[PlayerWorker] %s cycles/s at %s calls /s', this.numCycles, numCalls);
 				}
 				time = performance.now();
-				numCycles = 0;
 				numCalls = 0;
 			}
 
@@ -85,9 +90,9 @@ class PlayerWorker {
 					this._player.setSwitchInput(data.switchNr, data.optionalEnableSwitch);
 				}
 				break;
-			case 'popStates':
+			case 'onFrame':
 				if (this._player) {
-					const states = this._player.popStates();
+					const states = this._player.onFrame();
 					postMessage({ states: states.changedStates });
 					if (this._player.hasDmd()) {
 						postMessage({ dmd: this._player.getDmdFrame(), dim: this._player.getDmdDimensions() })
