@@ -77,15 +77,6 @@ export class PlayerController {
 		window.vpw.player = this._player;
 		window.vpw.sceneItems = this.sceneItems;
 		window.vpw.tableItems = this.tableItems;
-
-		// init dmd
-		const canvas = document.getElementById('dmd');
-		canvas.setAttribute('style', 'display:block');
-		this.canvasContext = canvas.getContext('2d');
-
-		// show buttons
-		const buttons = document.getElementById('emu-buttons');
-		buttons.setAttribute('style', 'display:block');
 	}
 
 	_onMessage(e) {
@@ -130,6 +121,9 @@ export class PlayerController {
 				ball.removeFromScene(this.scene, this.renderApi);
 				this.ballName = undefined;
 				break;
+			}
+			case 'emuStarted': {
+				this._showEmuUI();
 			}
 		}
 	}
@@ -186,6 +180,17 @@ export class PlayerController {
 			const sceneItem = this.sceneItems[name];
 			tableItem.getUpdater().applyState(sceneItem, states[name], this.renderApi, this.table);
 		}
+	}
+
+	_showEmuUI() {
+		// init dmd
+		const canvas = document.getElementById('dmd');
+		canvas.setAttribute('style', 'display:block');
+		this.canvasContext = canvas.getContext('2d');
+
+		// show buttons
+		const buttons = document.getElementById('emu-buttons');
+		buttons.setAttribute('style', 'display:block');
 	}
 
 	_updateDmd(frame, dim) {
