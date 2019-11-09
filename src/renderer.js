@@ -55,7 +55,7 @@ export class Renderer {
 		this.physicsLagStats = new Stats();
 		this.physicsLagStats.dom.style.cssText = 'position:fixed;top:50px;left:0;cursor:pointer;opacity:0.9;z-index:10000';
 		this.physicsLagStats.showPanel(1);
-		this.physicsCpsStats = new Stats('FPS', '#ff6700', '#250d00');
+		this.physicsCpsStats = new Stats('CPS', '#ff6700', '#250d00');
 		this.physicsCpsStats.dom.style.cssText = 'position:fixed;top:100px;left:0;cursor:pointer;opacity:0.9;z-index:10000';
 		this.physicsCpsStats.showPanel(0);
 		document.body.appendChild(this.renderStats.dom);
