@@ -46,6 +46,7 @@ body,html
 body
 	margin: 0
 	background-color: #333
+	position: relative
 canvas
 	display: block
 
@@ -55,6 +56,20 @@ canvas#dmd
 	left: 82px
 	background-color: #151515
 	display: none
+
+button#close-playfield
+	display: none
+	position: absolute
+	margin: 10px
+	top: 0
+	right: 0
+	color: rgba(255, 255, 255, 0.2)
+	background-color: transparent
+	border: none
+	font-size: 40px
+
+	&:hover
+		color: rgba(255, 255, 255, 0.3)
 
 #emu-buttons
 	position: absolute

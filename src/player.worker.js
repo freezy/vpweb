@@ -46,7 +46,7 @@ class PlayerWorker {
 
 		progress().start('table.player', 'Starting game');
 		this._player = new Player(table);
-		this._player.on('ballCreated', ball => postMessage({ event: 'ballCreated', data: ball.data, state: ball.getState() }));
+		this._player.on('ballCreated', ball => postMessage({ event: 'ballCreated', id: ball.id, data: ball.data, state: ball.getState() }));
 		this._player.on('ballDestroyed', ball => postMessage({event: 'ballDestroyed', name: ball.getName()}));
 		this._player.on('emuStarted', () => postMessage({event: 'emuStarted'}));
 		this._player.init(self.vpw.scope);

@@ -38,4 +38,13 @@ export class FileCache {
 		}
 		return response.blob();
 	}
+
+	/**
+	 * Clears the last upload
+	 * @return {Promise<void>}
+	 */
+	async reset() {
+		await this.cache.delete(this.key);
+	}
+
 }

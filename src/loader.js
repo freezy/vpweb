@@ -57,6 +57,19 @@ export class Loader {
 		window.vpw.physics = this.renderer.player;
 	}
 
+	reset() {
+		this.player.reset();
+		this.renderer.reset();
+		this.cache.reset().then(() => {
+			delete this.player;
+			delete this.renderer;
+
+			delete window.vpw.controller;
+			delete window.vpw.table;
+			delete window.vpw.physics;
+		});
+	}
+
 	/**
 	 * Creates a parsed table object from an uploaded .vpx.
 	 *

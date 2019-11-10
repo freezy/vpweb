@@ -16,7 +16,20 @@ export class Renderer {
 		this._initControls();
 		this._initLights();
 		this._resetCamera();
-		document.getElementById('top-container').classList.add('d-none')
+		document.getElementById('top-container').classList.add('d-none');
+		document.getElementById('close-playfield').classList.add('d-block');
+	}
+
+	reset() {
+		cancelAnimationFrame(this.animationFrame);
+		document.getElementById('top-container').classList.remove('d-none');
+		document.getElementById('close-playfield').classList.remove('d-block');
+		document.body.removeChild(this.renderer.domElement);
+		document.body.removeChild(this.renderStats.dom);
+		document.body.removeChild(this.physicsLagStats.dom);
+		document.body.removeChild(this.physicsCpsStats.dom);
+
+		delete window.vpw.scene;
 	}
 
 	setPlayfield(playfield) {
@@ -139,7 +152,7 @@ export class Renderer {
 	}
 
 	animate() {
-		requestAnimationFrame(this.animate.bind(this));
+		this.animationFrame = requestAnimationFrame(this.animate.bind(this));
 		this.controls.update();
 		if (this.player) {
 			this.player.onFrame();
@@ -156,6 +169,5 @@ export class Renderer {
 		this.renderStats.begin();
 		this.renderer.render(this.scene, this.camera);
 		this.renderStats.end();
-
 	}
 }

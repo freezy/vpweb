@@ -89,6 +89,15 @@ export class PlayerController {
 		window.vpw.items = table.getElementApis();
 	}
 
+	reset() {
+		this.messageQueue = [];
+		this.worker.terminate();
+		this._hideEmuUI();
+		delete window.vpw.sceneItems;
+		delete window.vpw.tableItems;
+		delete window.vpw.items;
+	}
+
 	_onMessage(e) {
 
 		// table element
@@ -178,7 +187,7 @@ export class PlayerController {
 
 	_createBall(data) {
 		console.log('Created ball:', data);
-		const ball = new Ball(data.data, data.state, 0, null, this.table);
+		const ball = new Ball(data.id, data.data, data.state, 0, null, this.table);
 		const name = ball.getName();
 		ball.addToScene(this.scene, this.renderApi, this.table).then(mesh => {
 			this.sceneItems[name] = mesh;
@@ -260,6 +269,17 @@ export class PlayerController {
 		// show buttons
 		const buttons = document.getElementById('emu-buttons');
 		buttons.setAttribute('style', 'display:block');
+	}
+
+	_hideEmuUI() {
+		// init dmd
+		const canvas = document.getElementById('dmd');
+		canvas.removeAttribute('style');
+		this.canvasContext = null;
+
+		// show buttons
+		const buttons = document.getElementById('emu-buttons');
+		buttons.removeAttribute('style');
 	}
 
 	_updateDmd(frame, dim) {
