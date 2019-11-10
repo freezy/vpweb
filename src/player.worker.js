@@ -1,7 +1,4 @@
-import {Table} from '../../vpx-js/dist/lib/vpt/table/table'
-import {Player} from '../../vpx-js/dist/lib/game/player'
-import {BrowserBinaryReader} from '../../vpx-js/dist/lib/io/binary-reader.browser';
-import {Progress, progress } from '../../vpx-js/dist/lib/util/logger';
+import {Table, Player, BrowserBinaryReader, Progress, progress } from 'vpx-js'
 
 let tableParseStart = 0;
 self.vpw = {

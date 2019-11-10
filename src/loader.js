@@ -1,13 +1,8 @@
-import {Table} from '../../vpx-js/dist/lib/vpt/table/table';
-import {ThreeRenderApi} from '../../vpx-js/dist/lib/render/threejs/three-render-api'
-import {BrowserBinaryReader} from '../../vpx-js/dist/lib/io/binary-reader.browser';
-import {ThreeTextureLoaderBrowser} from '../../vpx-js/dist/lib/render/threejs/three-texture-loader-browser';
-import {Progress, progress} from '../../vpx-js/dist/lib/util/logger';
-
-import {Renderer} from './renderer';
-import {PlayerController} from './player.controller';
-import {Controller} from "./controller";
-import {ProgressModal} from "./progress";
+import { BrowserBinaryReader, Progress, progress, Table, ThreeRenderApi, ThreeTextureLoaderBrowser } from 'vpx-js';
+import { Renderer } from './renderer';
+import { PlayerController } from './player.controller';
+import { Controller } from './controller';
+import { ProgressModal } from './progress';
 
 export class Loader {
 

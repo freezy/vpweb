@@ -1,5 +1,5 @@
-import {GUI} from 'three/examples/jsm/libs/dat.gui.module'
-import {Ball} from '../../vpx-js/dist/lib/vpt/ball/ball'
+//import {GUI} from 'three/examples/jsm/libs/dat.gui.module';
+import {Ball} from 'vpx-js';
 import Worker from 'worker-loader!./player.worker.js';
 import {AdditiveBlending, Color, MultiplyBlending, NoBlending, NormalBlending, SubtractiveBlending} from "three";
 
@@ -327,13 +327,13 @@ export class PlayerController {
 		}
 	}
 
-	_initGUI() {
-		const gui = new GUI();
-		gui.add(this.renderController, 'opacity', 0, 1, 0.005).onChange(this._guiChanged.bind(this));
-		gui.add(this.renderController, 'saturation', 0, 2, 0.01).onChange(this._guiChanged.bind(this));
-		gui.add(this.renderController, 'lightness', 0, 2, 0.01).onChange(this._guiChanged.bind(this));
-		gui.add(this.renderController, 'emissiveIntensity', 0, 10, 0.1).onChange(this._guiChanged.bind(this));
-		gui.add(this.renderController, 'blending', Object.keys(BLENDINGS)).onChange(this._guiChanged.bind(this));
-		this._guiChanged();
-	}
+	// _initGUI() {
+	// 	const gui = new GUI();
+	// 	gui.add(this.renderController, 'opacity', 0, 1, 0.005).onChange(this._guiChanged.bind(this));
+	// 	gui.add(this.renderController, 'saturation', 0, 2, 0.01).onChange(this._guiChanged.bind(this));
+	// 	gui.add(this.renderController, 'lightness', 0, 2, 0.01).onChange(this._guiChanged.bind(this));
+	// 	gui.add(this.renderController, 'emissiveIntensity', 0, 10, 0.1).onChange(this._guiChanged.bind(this));
+	// 	gui.add(this.renderController, 'blending', Object.keys(BLENDINGS)).onChange(this._guiChanged.bind(this));
+	// 	this._guiChanged();
+	// }
 }
