@@ -1,6 +1,7 @@
 const { resolve } = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const OptimizeThreePlugin = require('@vxna/optimize-three-webpack-plugin')
 
 module.exports = () => {
 	return {
@@ -8,10 +9,14 @@ module.exports = () => {
 			'app': './src/index.js',
 		},
 		plugins: [
+
 			new HtmlWebpackPlugin({
 				template: 'src/index.html',
 				minify: true,
 			}),
+
+			new OptimizeThreePlugin(),
+
 			// new webpack.ProvidePlugin({
 			// 	__alloc__: resolve('./webpack/alloc-log-collector'),
 			// }),
@@ -54,6 +59,34 @@ module.exports = () => {
 			hashFunction: 'sha256',
 			hashDigest: 'hex',
 			hashDigestLength: 12
+		},
+		optimization: {
+			splitChunks: {
+				chunks: 'all',
+				cacheGroups: {
+					meshes: {
+						test: /node_modules[\\/]vpx-js[\\/]dist[\\/]esm[\\/]res[\\/]meshes/,
+						name: "vpx-meshes",
+						chunks: "initial",
+						enforce: true,
+						priority: 20,
+					},
+					vpx: {
+						test: /node_modules[\\/]vpx-js/,
+						name: "vpx-js",
+						chunks: "initial",
+						enforce: true,
+						priority: 10,
+					},
+					vendor: {
+						test: /node_modules/,
+						name: "vendor",
+						chunks: "initial",
+						enforce: true,
+						priority: 0,
+					}
+				}
+			}
 		},
 		devtool: 'source-map'
 	};
