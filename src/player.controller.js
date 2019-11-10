@@ -1,5 +1,4 @@
 import {GUI} from 'three/examples/jsm/libs/dat.gui.module'
-import {Table} from '../../vpx-js/dist/lib/vpt/table/table'
 import {Ball} from '../../vpx-js/dist/lib/vpt/ball/ball'
 import Worker from 'worker-loader!./player.worker.js';
 import {AdditiveBlending, Color, MultiplyBlending, NoBlending, NormalBlending, SubtractiveBlending} from "three";
@@ -22,23 +21,25 @@ const BLENDINGS = {
 	'multiply': MultiplyBlending,
 };
 
+/**
+ * This class receives messages from the worker thread and updates the UI.
+ *
+ * It also creates the worker thread as soon as the blog is uploaded.
+ */
 export class PlayerController {
 
 	/**
 	 * @param {Blob} blob
-	 * @param {Table} table
-	 * @param {Renderer} renderer
-	 * @param {} renderApi
+	 * @param renderApi
+	 * @param progressModal
 	 */
-	constructor(blob, table, renderer, renderApi, progressModal) {
+	constructor(blob, renderApi, progressModal) {
 
 		this.sceneItems = {};
 		this.tableItems = {};
+		this.messageQueue = [];
 
-		this.table = table;
-		this.scene = renderer.scene;
 		this.renderApi = renderApi;
-		this.renderer = renderer;
 		this.progressModal = progressModal;
 		this.worker = new Worker();
 		this.worker.postMessage({ blob });
@@ -54,6 +55,13 @@ export class PlayerController {
 			'blending': 'normal',
 		};
 		//this._initGUI();
+	}
+
+	init(table, renderer) {
+
+		this.table = table;
+		this.renderer = renderer;
+		this.scene = renderer.scene;
 
 		// index scene items
 		const playfield = this.scene.children.find(c => c.name === 'playfield');
@@ -73,19 +81,24 @@ export class PlayerController {
 			this.tableItems[item.getName()] = item;
 		}
 
+		this._emptyQueue();
+
 		// index public apis
-		window.vpw.items = table.getElementApis();
-		window.vpw.player = this._player;
 		window.vpw.sceneItems = this.sceneItems;
 		window.vpw.tableItems = this.tableItems;
+		window.vpw.items = table.getElementApis();
 	}
 
 	_onMessage(e) {
 
 		// table element
 		if (e.data.states) {
-			this._updateState(e.data.states);
-			this.renderer.render();
+			if (this.messageQueue) {
+				this.messageQueue.push([ 'state', e.data.states]);
+			} else {
+				this._updateState(e.data.states);
+				this.renderer.render();
+			}
 			return;
 		}
 
@@ -97,32 +110,31 @@ export class PlayerController {
 
 		// physics loop cycles count
 		if (e.data.cpf) {
-			this.renderer._updateCps(e.data.cpf);
+			if (this.renderer) {
+				this.renderer._updateCps(e.data.cpf);
+			}
 		}
 
 		// ball events
 		switch (e.data.event) {
 			case 'ballCreated': {
-				console.log('Created ball:', e.data);
-				const ball = new Ball(e.data.data, e.data.state, 0, null, this.table);
-				const name = ball.getName();
-				ball.addToScene(this.scene, this.renderApi, this.table).then(mesh => {
-					this.sceneItems[name] = mesh;
-					this.tableItems[name] = ball;
-					ball.getUpdater().applyState(mesh, e.data.state, this.renderApi, this.table);
-				});
-				this.ballName = ball.getName();
+				if (this.messageQueue) {
+					this.messageQueue.push([ 'createBall', e.data ]);
+				} else {
+					this._createBall(e.data);
+				}
 				break;
 			}
+
 			case 'ballDestroyed': {
-				const ball = this.tableItems[e.data.name];
-				console.log('Destroyed ball:', ball);
-				delete this.sceneItems[ball.getName()];
-				delete this.tableItems[ball.getName()];
-				ball.removeFromScene(this.scene, this.renderApi);
-				this.ballName = undefined;
+				if (this.messageQueue) {
+					this.messageQueue.push([ 'destroyBall', e.data ]);
+				} else {
+					this._destroyBall(e.data);
+				}
 				break;
 			}
+
 			case 'emuStarted': {
 				this._showEmuUI();
 				break;
@@ -145,6 +157,44 @@ export class PlayerController {
 				break;
 			}
 		}
+	}
+
+	_emptyQueue() {
+		for (const msg of this.messageQueue) {
+			switch (msg[0]) {
+				case 'state':
+					this._updateState(msg[1]);
+					break;
+				case 'createBall':
+					this._createBall(msg[1]);
+					break;
+				case 'destroyBall':
+					this._destroyBall(msg[1]);
+					break;
+			}
+		}
+		this.messageQueue = null;
+	}
+
+	_createBall(data) {
+		console.log('Created ball:', data);
+		const ball = new Ball(data.data, data.state, 0, null, this.table);
+		const name = ball.getName();
+		ball.addToScene(this.scene, this.renderApi, this.table).then(mesh => {
+			this.sceneItems[name] = mesh;
+			this.tableItems[name] = ball;
+			ball.getUpdater().applyState(mesh, data.state, this.renderApi, this.table);
+		});
+		this.ballName = ball.getName();
+	}
+
+	_destroyBall(data) {
+		const ball = this.tableItems[data.name];
+		console.log('Destroyed ball:', ball);
+		delete this.sceneItems[ball.getName()];
+		delete this.tableItems[ball.getName()];
+		ball.removeFromScene(this.scene, this.renderApi);
+		this.ballName = undefined;
 	}
 
 	onFrame() {

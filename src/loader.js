@@ -5,7 +5,7 @@ import {ThreeTextureLoaderBrowser} from '../../vpx-js/dist/lib/render/threejs/th
 import {Progress, progress} from '../../vpx-js/dist/lib/util/logger';
 
 import {Renderer} from './renderer';
-import {PlayerController} from './player';
+import {PlayerController} from './player.controller';
 import {Controller} from "./controller";
 import {ProgressModal} from "./progress";
 
@@ -23,6 +23,7 @@ export class Loader {
 			optimizeTextures: false,
 		});
 
+		// link progress modal
 		this.progressModal = new ProgressModal();
 		Progress.setProgress(this.progressModal);
 	}
@@ -34,16 +35,24 @@ export class Loader {
 	 * @return {Promise<void>}
 	 */
 	async loadBlob(blob) {
-		// spawn worker
 
+		// spawn worker
+		this.player = new PlayerController(blob, this.renderApi, this.progressModal);
+
+		// parse table
 		const table = await this._parseBlob(blob);
+
+		// setup scene
 		progress().start('table.playfield', 'Generating playfield');
 		const playfield = await this._generatePlayfield(table);
 		this._setupRenderer(playfield);
-		this._setupPlayer(blob, table);
-		this._setupController();
+
+		// start player
+		this.player.init(table, this.renderer);
+		this.renderer.setPlayer(this.player);
 		progress().end('table.playfield');
 
+		window.vpw.controller = new Controller(this.renderer);
 		window.vpw.table = table;
 		window.vpw.physics = this.renderer.player;
 	}
@@ -99,18 +108,6 @@ export class Loader {
 			this.renderer.animate();
 		}
 		this.renderer.setPlayfield(playfield);
-	}
-
-	_setupPlayer(blob, table) {
-		if (blob && table && this.renderer) {
-			this.renderer.setPlayer(new PlayerController(blob, table, this.renderer, this.renderApi, this.progressModal));
-		}
-	}
-
-	_setupController() {
-		if (this.renderer) {
-			window.vpw.controller = new Controller(this.renderer);
-		}
 	}
 
 	dropHandler(ev) {

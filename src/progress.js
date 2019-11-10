@@ -1,6 +1,9 @@
 export class ProgressModal {
 
 	constructor() {
+
+		this.closeTimeout = 500;
+
 		this.modal = document.getElementById('progress-modal');
 		this.overlay = document.getElementById('modal-overlay');
 
@@ -56,7 +59,7 @@ export class ProgressModal {
 			this.endTimeout = setTimeout(() => {
 				this.close();
 				this.endTimeout = 0;
-			}, 1000);
+			}, this.closeTimeout);
 		} else {
 			const nextTitles = this.titles.length ? this.titles : this.workerTitles;
 			if (nextTitles.length) {
