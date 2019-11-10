@@ -4,8 +4,8 @@ import {Ball} from '../../vpx-js/dist/lib/vpt/ball/ball'
 import Worker from 'worker-loader!./player.worker.js';
 import {AdditiveBlending, Color, MultiplyBlending, NoBlending, NormalBlending, SubtractiveBlending} from "three";
 
-const CANVAS_HEIGHT = 96;
-const CANVAS_WIDTH = 384;
+const CANVAS_HEIGHT = 98;
+const CANVAS_WIDTH = 388;
 const GRID_SIZE = 3;
 const KOL = [
 	'rgb(64,10,0)',
@@ -213,8 +213,8 @@ export class PlayerController {
 				);
 			}
 			offsetX++;
-			if (offsetX === dim._x) {
-				offsetX = 0;
+			if (offsetX > dim._x) {
+				offsetX = 1;
 				offsetY++;
 			}
 		}
