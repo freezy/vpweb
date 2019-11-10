@@ -30,7 +30,7 @@ export class PlayerController {
 	 * @param {Renderer} renderer
 	 * @param {} renderApi
 	 */
-	constructor(blob, table, renderer, renderApi) {
+	constructor(blob, table, renderer, renderApi, progressModal) {
 
 		this.sceneItems = {};
 		this.tableItems = {};
@@ -39,6 +39,7 @@ export class PlayerController {
 		this.scene = renderer.scene;
 		this.renderApi = renderApi;
 		this.renderer = renderer;
+		this.progressModal = progressModal;
 		this.worker = new Worker();
 		this.worker.postMessage({ blob });
 		this.worker.onmessage = this._onMessage.bind(this);
@@ -124,6 +125,24 @@ export class PlayerController {
 			}
 			case 'emuStarted': {
 				this._showEmuUI();
+				break;
+			}
+
+			case 'progressStart': {
+				this.progressModal.start(e.data.id, e.data.title, true);
+				break;
+			}
+			case 'progressEnd': {
+				this.progressModal.end(e.data.id, true);
+				break;
+			}
+			case 'progressShow': {
+				this.progressModal.show(e.data.action, e.data.details, true);
+				break;
+			}
+			case 'progressDetails': {
+				this.progressModal.details(e.data.details, true);
+				break;
 			}
 		}
 	}

@@ -6,7 +6,11 @@
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 </head>
 <body onkeydown="vpw.controller.key(event)" onkeyup="vpw.controller.key(event)">
+
+<!-- dmd -->
 <canvas id="dmd" width="390" height="102"></canvas>
+
+<!-- emu buttons -->
 <div id="emu-buttons">
 	<div class="container p-0">
 		<div class="row m-2">
@@ -22,6 +26,8 @@
 		</div>
 	</div>
 </div>
+
+<!-- initial drop zone -->
 <div id="top-container" class="h-100">
 	<div class="row align-items-center h-100">
 		<div class="col-6 mx-auto dropzone" ondrop="vpw.loader.dropHandler(event)" ondragenter="vpw.loader.dragEnterHandler(event)" ondragleave="vpw.loader.dragLeaveHandler(event)" ondragover="vpw.loader.dragOverHandler(event)">
@@ -32,5 +38,21 @@
 		</div>
 	</div>
 </div>
+
+<!-- progress modal -->
+<div class="modal-overlay closed" id="modal-overlay"></div>
+<div class="modal closed" id="progress-modal">
+	<div class="modal-guts">
+		<div class="spinner"></div>
+		<h1 id="progress-header" class="ml-5 mb-3">Loading Table</h1>
+		<hr>
+		<div id="progress-action1" class="float-left">&nbsp;</div>
+		<div id="progress-item1" class="float-right">&nbsp;</div>
+		<div class="clearfix"></div>
+		<div id="progress-action2" class="float-left"><i>Waiting for web worker to spawn...</i></div>
+		<div id="progress-item2" class="float-right">&nbsp;</div>
+	</div>
+</div>
+
 </body>
 </html>

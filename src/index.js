@@ -1,8 +1,6 @@
 import './index.sass';
-
-import { Controller } from './controller';
-import { FileCache } from './file-cache';
-import { Loader } from './loader';
+import {FileCache} from './file-cache';
+import {Loader} from './loader';
 
 const cache = new FileCache();
 const loader = new Loader(cache);

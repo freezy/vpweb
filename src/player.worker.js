@@ -1,6 +1,7 @@
 import {Table} from '../../vpx-js/dist/lib/vpt/table/table'
 import {Player} from '../../vpx-js/dist/lib/game/player'
 import {BrowserBinaryReader} from '../../vpx-js/dist/lib/io/binary-reader.browser';
+import {Progress, progress } from '../../vpx-js/dist/lib/util/logger';
 
 let tableParseStart = 0;
 self.vpw = {
@@ -16,6 +17,22 @@ class PlayerWorker {
 			this.totalCycles = this.numCycles;
 			this.numCycles = 0;
 		}, 1000);
+
+		Progress.setProgress({
+			start(id, title) {
+				postMessage({ event: 'progressStart', id, title });
+			},
+			end(id) {
+				postMessage({ event: 'progressEnd', id });
+			},
+			show(action, details) {
+				postMessage({ event: 'progressShow', action, details });
+			},
+			details(details) {
+				postMessage({ event: 'progressDetails', details });
+			}
+		});
+		progress().start('worker', 'Booting up');
 	}
 
 	/**
@@ -27,6 +44,7 @@ class PlayerWorker {
 		self.vpw.table = table;
 		self.vpw.scope = {};
 
+		progress().start('table.player', 'Starting game');
 		this._player = new Player(table);
 		this._player.on('ballCreated', ball => postMessage({ event: 'ballCreated', data: ball.data, state: ball.getState() }));
 		this._player.on('ballDestroyed', ball => postMessage({event: 'ballDestroyed', name: ball.getName()}));
@@ -43,6 +61,8 @@ class PlayerWorker {
 
 		let numCalls = 0;
 		let time = performance.now();
+		progress().end('table.player');
+		progress().end('worker');
 		do {
 			this.numCycles += await this._work();
 			numCalls++;

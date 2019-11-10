@@ -2,10 +2,12 @@ import {Table} from '../../vpx-js/dist/lib/vpt/table/table';
 import {ThreeRenderApi} from '../../vpx-js/dist/lib/render/threejs/three-render-api'
 import {BrowserBinaryReader} from '../../vpx-js/dist/lib/io/binary-reader.browser';
 import {ThreeTextureLoaderBrowser} from '../../vpx-js/dist/lib/render/threejs/three-texture-loader-browser';
+import {Progress, progress} from '../../vpx-js/dist/lib/util/logger';
 
 import {Renderer} from './renderer';
 import {PlayerController} from './player';
 import {Controller} from "./controller";
+import {ProgressModal} from "./progress";
 
 export class Loader {
 
@@ -20,6 +22,9 @@ export class Loader {
 			applyTextures: new ThreeTextureLoaderBrowser(),
 			optimizeTextures: false,
 		});
+
+		this.progressModal = new ProgressModal();
+		Progress.setProgress(this.progressModal);
 	}
 
 	/**
@@ -29,11 +34,15 @@ export class Loader {
 	 * @return {Promise<void>}
 	 */
 	async loadBlob(blob) {
+		// spawn worker
+
 		const table = await this._parseBlob(blob);
+		progress().start('table.playfield', 'Generating playfield');
 		const playfield = await this._generatePlayfield(table);
 		this._setupRenderer(playfield);
 		this._setupPlayer(blob, table);
 		this._setupController();
+		progress().end('table.playfield');
 
 		window.vpw.table = table;
 		window.vpw.physics = this.renderer.player;
@@ -46,6 +55,7 @@ export class Loader {
 	 * @return {Promise<Table>}
 	 */
 	async _parseBlob(blob) {
+		// load table
 		return await Table.load(new BrowserBinaryReader(blob));
 	}
 
@@ -93,7 +103,7 @@ export class Loader {
 
 	_setupPlayer(blob, table) {
 		if (blob && table && this.renderer) {
-			this.renderer.setPlayer(new PlayerController(blob, table, this.renderer, this.renderApi));
+			this.renderer.setPlayer(new PlayerController(blob, table, this.renderer, this.renderApi, this.progressModal));
 		}
 	}
 
