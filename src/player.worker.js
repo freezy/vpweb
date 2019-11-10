@@ -24,8 +24,8 @@ class PlayerWorker {
 	async start(table) {
 		console.log('[PlayerWorker.start] Worker parsed table in %sms', Date.now() - tableParseStart);
 
+		self.vpw.table = table;
 		self.vpw.scope = {};
-		this._table = table;
 
 		this._player = new Player(table);
 		this._player.on('ballCreated', ball => postMessage({ event: 'ballCreated', data: ball.data, state: ball.getState() }));
@@ -36,7 +36,7 @@ class PlayerWorker {
 
 		// set some debugging globals
 		self.vpw.tableItems = {};
-		for (const item of [ ...table.getMovables(), ...table.getAnimatables() ]) {
+		for (const item of table.getScriptables()) {
 			self.vpw.tableItems[item.getName()] = item;
 		}
 		self.vpw.items = table.getElementApis();
