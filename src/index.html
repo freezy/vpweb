@@ -33,14 +33,10 @@
 </button>
 
 <!-- initial drop zone -->
-<div id="top-container" class="h-100">
-	<div class="row align-items-center h-100">
-		<div class="col-6 mx-auto dropzone" ondrop="vpw.loader.dropHandler(event)" ondragenter="vpw.loader.dragEnterHandler(event)" ondragleave="vpw.loader.dragLeaveHandler(event)" ondragover="vpw.loader.dragOverHandler(event)">
-			<div id="dropzone" class="jumbotron text-center bg-dropzone text-dropzone">
-				<h1 class="display-4">Drag VPX here</h1>
-				<p class="lead">(it's not uploaded anywhere)</p>
-			</div>
-		</div>
+<div id="vpx-drop">
+	<div class="modal-guts text-center" ondrop="vpw.loader.dropHandler(event)" ondragenter="vpw.loader.dragEnterHandler(event)" ondragleave="vpw.loader.dragLeaveHandler(event)" ondragover="vpw.loader.dragOverHandler(event)">
+		<h1 class="display-4 mt-4">Drag VPX here</h1>
+		<p class="lead mt-3">(it's not uploaded anywhere)</p>
 	</div>
 </div>
 

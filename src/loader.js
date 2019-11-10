@@ -16,7 +16,7 @@ export class Loader {
 	 */
 	constructor(cache) {
 		this.cache = cache;
-		this.dropzone = document.getElementById('dropzone');
+		this.dropzone = document.getElementById('vpx-drop');
 		this.renderApi = new ThreeRenderApi({
 			applyMaterials: true,
 			applyTextures: new ThreeTextureLoaderBrowser(),
@@ -145,17 +145,17 @@ export class Loader {
 				break;
 			}
 		}
-		this.dropzone.classList.remove('bg-dropzone-hover');
+		this.dropzone.classList.remove('drop-hover');
 		ev.preventDefault();
 	}
 
 	dragEnterHandler(ev) {
-		this.dropzone.classList.add('bg-dropzone-hover');
+		this.dropzone.classList.add('drop-hover');
 		ev.preventDefault();
 	}
 
 	dragLeaveHandler(ev) {
-		this.dropzone.classList.remove('bg-dropzone-hover');
+		this.dropzone.classList.remove('drop-hover');
 		ev.preventDefault();
 	}
 
