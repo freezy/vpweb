@@ -1,11 +1,5 @@
-import { AmbientLight } from 'three/src/lights/AmbientLight';
-import { DirectionalLight } from 'three/src/lights/DirectionalLight';
-import { PerspectiveCamera } from 'three/src/cameras/PerspectiveCamera';
-import { Scene } from 'three/src/scenes/Scene';
-import { Vector3 } from 'three/src/math/Vector3';
-import { VSMShadowMap } from 'three/src/constants';
-import { WebGLRenderer } from 'three/src/renderers/WebGLRenderer';
-import { OrbitControls } from '../vendor/three/OrbitControls';
+import { AmbientLight, DirectionalLight, PerspectiveCamera, Scene, Vector3, VSMShadowMap, WebGLRenderer } from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import Stats from './stats.js';
 
 export class Renderer {
