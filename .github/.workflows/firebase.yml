@@ -8,7 +8,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout VPX-JS
+      - name: Clone VPX-JS
         run: git clone https://github.com/vpdb/vpx-js.git .
       - name: Install Dependencies
         run: npm ci
