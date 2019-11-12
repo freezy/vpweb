@@ -1,4 +1,4 @@
-import { BrowserBinaryReader, Progress, progress, Table, ThreeRenderApi, ThreeTextureLoaderBrowser } from 'vpx-js';
+import { BrowserBinaryReader, Progress, progress, Table, ThreeRenderApi, ThreeTextureLoader } from 'vpx-js';
 import { Renderer } from './renderer';
 import { PlayerController } from './player.controller';
 import { Controller } from './controller';
@@ -14,7 +14,7 @@ export class Loader {
 		this.dropzone = document.getElementById('vpx-drop');
 		this.renderApi = new ThreeRenderApi({
 			applyMaterials: true,
-			applyTextures: new ThreeTextureLoaderBrowser(),
+			applyTextures: new ThreeTextureLoader(),
 			optimizeTextures: false,
 		});
 
