@@ -1,7 +1,5 @@
 const { resolve } = require('path');
-const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const OptimizeThreePlugin = require('@vxna/optimize-three-webpack-plugin')
 
 module.exports = () => {
 	return {
@@ -14,8 +12,6 @@ module.exports = () => {
 				template: 'src/index.html',
 				minify: true,
 			}),
-
-			new OptimizeThreePlugin(),
 
 			// new webpack.ProvidePlugin({
 			// 	__alloc__: resolve('./webpack/alloc-log-collector'),
