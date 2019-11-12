@@ -1,7 +1,9 @@
 const { resolve } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const Critters = require('critters-webpack-plugin');
 
-module.exports = () => {
+module.exports = opts => {
 	return {
 		entry: {
 			'app': './src/index.js',
@@ -12,6 +14,15 @@ module.exports = () => {
 				template: 'src/index.html',
 				minify: true,
 			}),
+
+			new MiniCssExtractPlugin({
+				// Options similar to the same options in webpackOptions.output
+				// both options are optional
+				filename: opts.devMode ? '[name].css' : '[name].[hash].css',
+				chunkFilename: opts.devMode ? '[id].css' : '[id].[hash].css',
+			}),
+
+			new Critters(),
 
 			// new webpack.ProvidePlugin({
 			// 	__alloc__: resolve('./webpack/alloc-log-collector'),
@@ -24,23 +35,20 @@ module.exports = () => {
 					use: 'raw-loader',
 				},
 				{
-					test: /\.(scss|sass)$/,
-					use: [{
-						loader: 'style-loader', // inject CSS to page
-					}, {
-						loader: 'css-loader', // translates CSS into CommonJS modules
-					}, {
-						loader: 'postcss-loader', // Run postcss actions
-						options: {
-							plugins: function () { // postcss plugins, can be exported to postcss.config.js
-								return [
-									require('autoprefixer')
-								];
-							}
-						}
-					}, {
-						loader: 'sass-loader' // compiles Sass to CSS
-					}]
+					test: /\.(sa|sc|c)ss$/,
+					use: [
+						{
+							loader: MiniCssExtractPlugin.loader,
+							options: { hmr: !opts.devMode },
+						}, {
+							loader: 'css-loader',
+						}, {
+							loader: 'postcss-loader',
+							options: { plugins: () => [ require('autoprefixer') ], }
+						}, {
+							loader: 'sass-loader'
+						},
+					],
 				},
 				{
 					test: /\.(eot|woff|woff2|ttf|otf|png|svg|jpg|swf|hdr|exr)$/,
