@@ -6,6 +6,30 @@
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 	<meta name="description" content="Play Visual Pinball in the browser!">
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
+	<link rel="stylesheet" href="index.css" type="text/css"/>
+	<script>
+		// setup service worker
+		if ('serviceWorker' in navigator) {
+			window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
+		}
+
+		// controls
+		function setCabinetInput(key) {
+			if ('vpw' in window && vpw.controller) {
+				vpw.controller.setCabinetInput(key);
+			}
+		}
+		function setInput(key) {
+			if ('vpw' in window && vpw.controller) {
+				vpw.controller.setInput(key);
+			}
+		}
+		function key(key) {
+			if ('vpw' in window && vpw.controller) {
+				vpw.controller.key(key);
+			}
+		}
+	</script>
 </head>
 <body onkeydown="key(event)" onkeyup="key(event)">
 
@@ -57,29 +81,6 @@
 	</div>
 </div>
 
-<script>
-	// setup service worker
-	if ('serviceWorker' in navigator) {
-		window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
-	}
-
-	// controls
-	function setCabinetInput(key) {
-		if ('vpw' in window && vpw.controller) {
-			vpw.controller.setCabinetInput(key);
-		}
-	}
-	function setInput(key) {
-		if ('vpw' in window && vpw.controller) {
-			vpw.controller.setInput(key);
-		}
-	}
-	function key(key) {
-		if ('vpw' in window && vpw.controller) {
-			vpw.controller.key(key);
-		}
-	}
-</script>
-
+<script src="index.js" type="application/javascript"></script>
 </body>
 </html>

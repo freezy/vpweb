@@ -28,6 +28,7 @@
 		"three": "0.110.0"
 	},
 	"devDependencies": {
+		"@ampproject/rollup-plugin-closure-compiler": "^0.12.1",
 		"autoprefixer": "9.7.1",
 		"copy-webpack-plugin": "^5.0.5",
 		"critters-webpack-plugin": "^2.4.0",
@@ -40,12 +41,15 @@
 		"http-server": "0.11.1",
 		"mini-css-extract-plugin": "^0.8.0",
 		"node-sass": "4.13.0",
+		"postcss": "^7.0.21",
 		"postcss-loader": "3.0.0",
 		"raw-loader": "3.1.0",
 		"rimraf": "3.0.0",
 		"rollup": "^1.27.0",
+		"rollup-plugin-commonjs": "^10.1.0",
 		"rollup-plugin-node-resolve": "^5.2.0",
 		"rollup-plugin-off-main-thread": "^1.1.0",
+		"rollup-plugin-postcss": "^2.0.3",
 		"rollup-plugin-sass": "^1.2.2",
 		"rollup-plugin-string": "^3.0.0",
 		"sass-loader": "8.0.0",

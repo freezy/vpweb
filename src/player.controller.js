@@ -1,6 +1,5 @@
 //import {GUI} from 'three/examples/jsm/libs/dat.gui.module';
 import {Ball} from 'vpx-js';
-import Worker from 'worker-loader!./player.worker.js';
 import {AdditiveBlending, Color, MultiplyBlending, NoBlending, NormalBlending, SubtractiveBlending} from "three";
 
 const CANVAS_HEIGHT = 98;
@@ -41,7 +40,7 @@ export class PlayerController {
 
 		this.renderApi = renderApi;
 		this.progressModal = progressModal;
-		this.worker = new Worker();
+		this.worker = new Worker('./player.worker.js');
 		this.worker.postMessage({ blob });
 		this.worker.onmessage = this._onMessage.bind(this);
 		this.playfieldLights = [];
