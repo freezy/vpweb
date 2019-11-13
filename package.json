@@ -11,6 +11,7 @@
 		"start": "npm run serve",
 		"serve": "webpack-dev-server --config webpack/webpack.dev.js --inline --progress",
 		"serve:prod": "npm run build && http-server ./dist -a 127.0.0.1",
+		"rollup": "rimraf dist && rollup -c",
 		"build": "rimraf dist && webpack --config webpack/webpack.prod.js --bail --progress --profile --json > stats.json",
 		"build:analyze": "rimraf dist && webpack --config webpack/webpack.analyze.js --bail --progress --profile --json > stats.json",
 		"build:dev": "rimraf dist && webpack --config webpack/webpack.dev.js --bail --progress --profile --json > stats.json"
@@ -24,8 +25,7 @@
 	"license": "GPL-2.0",
 	"dependencies": {
 		"bootstrap": "4.3.1",
-		"three": "0.110.0",
-		"vpx-js": "1.2.5"
+		"three": "0.110.0"
 	},
 	"devDependencies": {
 		"autoprefixer": "9.7.1",
@@ -43,6 +43,11 @@
 		"postcss-loader": "3.0.0",
 		"raw-loader": "3.1.0",
 		"rimraf": "3.0.0",
+		"rollup": "^1.27.0",
+		"rollup-plugin-node-resolve": "^5.2.0",
+		"rollup-plugin-off-main-thread": "^1.1.0",
+		"rollup-plugin-sass": "^1.2.2",
+		"rollup-plugin-string": "^3.0.0",
 		"sass-loader": "8.0.0",
 		"style-loader": "1.0.0",
 		"webpack": "4.41.2",
