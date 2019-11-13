@@ -4,9 +4,10 @@
 	<title>VPWeb</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<meta name="description" content="Play Visual Pinball in the browser!">
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
 </head>
-<body onkeydown="vpw.controller.key(event)" onkeyup="vpw.controller.key(event)">
+<body onkeydown="key(event)" onkeyup="key(event)">
 
 <!-- dmd -->
 <canvas id="dmd" width="390" height="102"></canvas>
@@ -15,15 +16,15 @@
 <div id="emu-buttons">
 	<div class="container p-0">
 		<div class="row m-2">
-			<button class="btn btn-primary btn-sm btn-w1 mr-2" onclick="vpw.controller.setCabinetInput(16);">ESC</button>
-			<button class="btn btn-primary btn-sm btn-w1" onclick="vpw.controller.setCabinetInput(128);">OK</button>
+			<button class="btn btn-primary btn-sm btn-w1 mr-2" onclick="setCabinetInput(16);">ESC</button>
+			<button class="btn btn-primary btn-sm btn-w1" onclick="setCabinetInput(128);">OK</button>
 		</div>
 		<div class="row m-2">
-			<button class="btn btn-primary btn-sm btn-w1 mr-2" onclick="vpw.controller.setCabinetInput(32);">&ndash;</button>
-			<button class="btn btn-primary btn-sm btn-w1" onclick="vpw.controller.setCabinetInput(64);">+</button>
+			<button class="btn btn-primary btn-sm btn-w1 mr-2" onclick="setCabinetInput(32);">&ndash;</button>
+			<button class="btn btn-primary btn-sm btn-w1" onclick="setCabinetInput(64);">+</button>
 		</div>
 		<div class="row m-2">
-			<button class="btn btn-primary btn-sm w-100" onclick="vpw.controller.setInput(22);">Coin Door</button>
+			<button class="btn btn-primary btn-sm w-100" onclick="setInput(22);">Coin Door</button>
 		</div>
 	</div>
 </div>
@@ -56,10 +57,27 @@
 	</div>
 </div>
 
-<!-- setup service worker -->
 <script>
+	// setup service worker
 	if ('serviceWorker' in navigator) {
 		window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
+	}
+
+	// controls
+	function setCabinetInput(key) {
+		if (vpw in window && vpw.controller) {
+			vpw.controller.setCabinetInput(key);
+		}
+	}
+	function setInput(key) {
+		if (vpw in window && vpw.controller) {
+			vpw.controller.setInput(key);
+		}
+	}
+	function key(key) {
+		if (vpw in window && vpw.controller) {
+			vpw.controller.key(key);
+		}
 	}
 </script>
 

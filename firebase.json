@@ -15,6 +15,15 @@
 				]
 			},
 			{
+				"source": "**/node_modules/**",
+				"headers": [
+					{
+						"key": "Cache-Control",
+						"value": "no-transform,public,max-age=31536000"
+					}
+				]
+			},
+			{
 				"source": "sw.js",
 				"headers": [
 					{

@@ -68,13 +68,9 @@ module.exports = opts => {
 					],
 				},
 				{
-					test: /\.(eot|woff|woff2|ttf|otf|png|svg|jpg|swf|hdr|exr|ico)$/,
+					test: /\.(eot|woff|woff2|ttf|otf|png|svg|jpg|swf|hdr|exr)$/,
 					loader: { loader: 'file-loader', options: {name: '[path][name]-[sha256:hash:base58:8].[ext]'} },
-				},
-				{
-					test: /\.(eot|woff|woff2|ttf|otf|png|svg|jpg|swf|hdr|exr|ico)$/,
-					loader: { loader: 'file-loader', options: {name: '[path][name]-[sha256:hash:base58:8].[ext]'} },
-				},
+				}
 			],
 			noParse: /moo\.js/
 		},
