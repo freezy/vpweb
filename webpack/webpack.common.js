@@ -1,5 +1,6 @@
 const { resolve } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const WebpackPwaManifest = require('webpack-pwa-manifest');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const Critters = require('critters-webpack-plugin');
 
@@ -12,7 +13,20 @@ module.exports = opts => {
 
 			new HtmlWebpackPlugin({
 				template: 'src/index.html',
-				minify: true,
+				minify: !opts.devMode,
+			}),
+
+			new WebpackPwaManifest({
+				name: 'Visual Pinball for the Web',
+				short_name: 'VPWeb',
+				description: 'Visual Pinball running in the browser',
+				theme_color: '#f35000',
+				background_color: '#333333',
+				crossorigin: 'use-credentials',
+				icons: [ {
+					src: resolve('src/images/vpinball.png'),
+					sizes: [ 72, 96, 128 ]
+				} ]
 			}),
 
 			new MiniCssExtractPlugin({
@@ -51,7 +65,7 @@ module.exports = opts => {
 					],
 				},
 				{
-					test: /\.(eot|woff|woff2|ttf|otf|png|svg|jpg|swf|hdr|exr)$/,
+					test: /\.(eot|woff|woff2|ttf|otf|png|svg|jpg|swf|hdr|exr|ico)$/,
 					loader: { loader: 'file-loader', options: {name: '[path][name]-[sha256:hash:base58:8].[ext]'} },
 				},
 			],
