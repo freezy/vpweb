@@ -27,7 +27,9 @@ module.exports = opts => {
 				icons: [ {
 					src: resolve('src/images/vpinball.png'),
 					sizes: [ 72, 96, 128, 192, 256, 384, 512],
-				} ]
+					ios: true,
+				} ],
+				ios: true,
 			}),
 
 			new MiniCssExtractPlugin({
