@@ -65,17 +65,17 @@
 
 	// controls
 	function setCabinetInput(key) {
-		if (vpw in window && vpw.controller) {
+		if ('vpw' in window && vpw.controller) {
 			vpw.controller.setCabinetInput(key);
 		}
 	}
 	function setInput(key) {
-		if (vpw in window && vpw.controller) {
+		if ('vpw' in window && vpw.controller) {
 			vpw.controller.setInput(key);
 		}
 	}
 	function key(key) {
-		if (vpw in window && vpw.controller) {
+		if ('vpw' in window && vpw.controller) {
 			vpw.controller.key(key);
 		}
 	}
