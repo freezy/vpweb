@@ -1,4 +1,6 @@
 import './index.sass';
+import './favicon.ico';
+
 import {FileCache} from './file-cache';
 import {Loader} from './loader';
 

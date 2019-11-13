@@ -6,7 +6,7 @@
 		],
 		"headers": [
 			{
-				"source": "**/*",
+				"source": "**/**([0-9a-z]{12,})*",
 				"headers": [
 					{
 						"key": "Cache-Control",

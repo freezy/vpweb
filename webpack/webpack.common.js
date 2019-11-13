@@ -2,6 +2,7 @@ const { resolve } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const Critters = require('critters-webpack-plugin');
 
 module.exports = opts => {
@@ -38,6 +39,8 @@ module.exports = opts => {
 
 			new Critters(),
 
+			new CopyPlugin([ { from: 'src/favicon.ico', to: 'favicon.ico' } ]),
+
 			// new webpack.ProvidePlugin({
 			// 	__alloc__: resolve('./webpack/alloc-log-collector'),
 			// }),
@@ -63,6 +66,10 @@ module.exports = opts => {
 							loader: 'sass-loader'
 						},
 					],
+				},
+				{
+					test: /\.(eot|woff|woff2|ttf|otf|png|svg|jpg|swf|hdr|exr|ico)$/,
+					loader: { loader: 'file-loader', options: {name: '[path][name]-[sha256:hash:base58:8].[ext]'} },
 				},
 				{
 					test: /\.(eot|woff|woff2|ttf|otf|png|svg|jpg|swf|hdr|exr|ico)$/,
