@@ -10,6 +10,7 @@ module.exports = function() {
 				swDest: 'sw.js',
 				clientsClaim: true,
 				skipWaiting: true,
+				dontCacheBustURLsMatching: /-\w{8,}\./
 			}),
 		]
 	});
