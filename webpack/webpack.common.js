@@ -26,7 +26,7 @@ module.exports = opts => {
 				crossorigin: 'use-credentials',
 				icons: [ {
 					src: resolve('src/images/vpinball.png'),
-					sizes: [ 72, 96, 128 ]
+					sizes: [ 72, 96, 128, 192, 256, 384, 512],
 				} ]
 			}),
 
