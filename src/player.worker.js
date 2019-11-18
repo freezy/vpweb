@@ -50,6 +50,7 @@ class PlayerWorker {
 		this._looping = true;
 
 		// set some debugging globals
+		self.vpw.player = this._player;
 		self.vpw.tableItems = {};
 		for (const item of table.getScriptables()) {
 			self.vpw.tableItems[item.getName()] = item;
