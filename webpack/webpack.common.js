@@ -15,6 +15,7 @@ module.exports = opts => {
 			new HtmlWebpackPlugin({
 				template: 'src/index.html',
 				minify: !opts.devMode,
+				PRODUCTION: !opts.devMode,
 			}),
 
 			new WebpackPwaManifest({

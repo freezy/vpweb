@@ -6,6 +6,30 @@
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 	<meta name="description" content="Play Visual Pinball in the browser!">
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
+	<script type="application/javascript">
+		const PRODUCTION = <%= htmlWebpackPlugin.options.PRODUCTION %>;
+
+		// setup service worker
+		if (PRODUCTION && 'serviceWorker' in navigator) {
+			window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
+		}
+		// controls
+		function setCabinetInput(key) {
+			if ('vpw' in window && vpw.controller) {
+				vpw.controller.setCabinetInput(key);
+			}
+		}
+		function setInput(key) {
+			if ('vpw' in window && vpw.controller) {
+				vpw.controller.setInput(key);
+			}
+		}
+		function key(key) {
+			if ('vpw' in window && vpw.controller) {
+				vpw.controller.key(key);
+			}
+		}
+	</script>
 </head>
 <body onkeydown="key(event)" onkeyup="key(event)">
 
@@ -56,30 +80,5 @@
 		<div id="progress-item2" class="float-right">&nbsp;</div>
 	</div>
 </div>
-
-<script>
-	// setup service worker
-	if ('serviceWorker' in navigator) {
-		window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
-	}
-
-	// controls
-	function setCabinetInput(key) {
-		if ('vpw' in window && vpw.controller) {
-			vpw.controller.setCabinetInput(key);
-		}
-	}
-	function setInput(key) {
-		if ('vpw' in window && vpw.controller) {
-			vpw.controller.setInput(key);
-		}
-	}
-	function key(key) {
-		if ('vpw' in window && vpw.controller) {
-			vpw.controller.key(key);
-		}
-	}
-</script>
-
 </body>
 </html>
