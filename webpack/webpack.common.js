@@ -1,4 +1,5 @@
 const { resolve } = require('path');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -12,8 +13,12 @@ module.exports = opts => {
 		},
 		plugins: [
 
+			new webpack.DefinePlugin({
+				PRODUCTION: !opts.devMode,
+			}),
+
 			new HtmlWebpackPlugin({
-				template: 'src/index.html',
+				template: 'src/index.ejs',
 				minify: !opts.devMode,
 				PRODUCTION: !opts.devMode,
 			}),
@@ -71,9 +76,16 @@ module.exports = opts => {
 					],
 				},
 				{
-					test: /\.(eot|woff|woff2|ttf|otf|png|svg|jpg|swf|hdr|exr)$/,
-					loader: { loader: 'file-loader', options: {name: '[path][name]-[sha256:hash:base58:8].[ext]'} },
-				}
+					test: /\.(eot|woff|woff2|ttf|otf|png|jpg|swf|hdr|exr)$/,
+					use: { loader: 'file-loader', options: {name: '[path][name]-[sha256:hash:base58:8].[ext]'} },
+				}, {
+					test: /\.ejs$/,
+					use: 'ejs-loader',
+				},
+				{
+					test: /\.svg$/,
+					loader: 'svg-inline-loader'
+				},
 			],
 			noParse: /moo\.js/
 		},
