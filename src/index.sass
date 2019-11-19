@@ -73,19 +73,33 @@ div#vpx-drop
 	&.drop-hover
 		background-color: #202020
 
-button#close-playfield
-	display: none
-	position: absolute
-	margin: 10px
+.btn-top-right
 	top: 0
-	right: 0
+	right: 10px
+	position: absolute
+
+.btn-bottom-right
+	bottom: 0
+	right: 10px
+	position: absolute
+
+.btn-transparent
+	margin: 10px
+	fill: rgba(255, 255, 255, 0.2)
 	color: rgba(255, 255, 255, 0.2)
 	background-color: transparent
 	border: none
 	font-size: 40px
-
+	&:focus
+		outline: none
 	&:hover
+		fill: rgba(255, 255, 255, 0.3)
 		color: rgba(255, 255, 255, 0.3)
+
+.btn-pause
+	& > svg
+		height: 32px
+		width: 32px
 
 #emu-buttons
 	position: absolute

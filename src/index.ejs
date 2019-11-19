@@ -5,9 +5,10 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 	<meta name="description" content="Play Visual Pinball in the browser!">
+	<meta name="og:image" content="<%= require('./images/banner.jpg')%>">
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
 	<script type="application/javascript">
-		const PRODUCTION = <%= htmlWebpackPlugin.options.PRODUCTION %>;
+		const PRODUCTION = <%= PRODUCTION %>;
 
 		// setup service worker
 		if (PRODUCTION && 'serviceWorker' in navigator) {
@@ -30,7 +31,7 @@
 			}
 		}
 	</script>
-	<%= htmlWebpackPlugin.options.PRODUCTION ? `<script type="text/javascript">var _paq = window._paq || [];_paq.push(['trackPageView']);_paq.push(['enableLinkTracking']);_paq.push(['enableHeartBeatTimer', 30]);(function() {var u="//count.vpdb.io/";_paq.push(['setTrackerUrl', u+'matomo.php']);_paq.push(['setSiteId', '1']);var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);})();</script>\n` : '' %>;
+	<script type="text/javascript">var _paq = window._paq || []; _paq.push(['trackPageView']); _paq.push(['enableLinkTracking']); _paq.push(['enableHeartBeatTimer', 30]); (function() { if (!PRODUCTION) return; var u = "//count.vpdb.io/"; _paq.push(['setTrackerUrl', u + 'matomo.php']); _paq.push(['setSiteId', '1']);var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];g.type = 'text/javascript';g.async = true;g.defer = true;g.src = u + 'matomo.js';s.parentNode.insertBefore(g, s);})();</script>
 </head>
 <body onkeydown="key(event)" onkeyup="key(event)">
 
@@ -55,8 +56,16 @@
 </div>
 
 <!-- top right close button -->
-<button id="close-playfield" type="button" aria-label="Close" onclick="vpw.loader.reset()">
+<button id="close-playfield" class="btn-transparent btn-top-right" type="button" aria-label="Close" onclick="vpw.loader.reset()">
 	<span aria-hidden="true">&times;</span>
+</button>
+
+<!-- pause button -->
+<button id="pause-playfield" class="btn-transparent btn-bottom-right btn-pause d-block" type="button" aria-label="Pause" onclick="vpw.loader.pause()">
+	<%= require('./images/pause_circle_filled.svg')%>
+</button>
+<button id="pause-playfield" class="btn-transparent btn-bottom-right btn-pause d-none" type="button" aria-label="Resume" onclick="vpw.loader.resume()">
+	<%= require('./images/play_circle_filled.svg')%>
 </button>
 
 <!-- initial drop zone -->
