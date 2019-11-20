@@ -46,6 +46,8 @@ class PlayerWorker {
 		this._player.on('ballCreated', ball => postMessage({ event: 'ballCreated', id: ball.id, data: ball.data, state: ball.getState() }));
 		this._player.on('ballDestroyed', ball => postMessage({event: 'ballDestroyed', name: ball.getName()}));
 		this._player.on('emuStarted', () => postMessage({event: 'emuStarted'}));
+		this._player.on('paused', () => postMessage({event: 'paused'}));
+		this._player.on('resumed', () => postMessage({event: 'resumed'}));
 		this._player.init(self.vpw.scope);
 		this._looping = true;
 
@@ -61,6 +63,7 @@ class PlayerWorker {
 		let time = performance.now();
 		progress().end('table.player');
 		progress().end('worker');
+		postMessage({event: 'started'});
 		do {
 			this.numCycles += await this._work();
 			numCalls++;
@@ -89,6 +92,12 @@ class PlayerWorker {
 	onEvent(name, data) {
 		// console.log(name, data);
 		switch (name) {
+			case 'pause':
+				this._player.pause();
+				break;
+			case 'resume':
+				this._player.resume();
+				break;
 			case 'keyDown':
 				if (this._player) {
 					this._player.onKeyDown(data);

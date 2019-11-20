@@ -56,15 +56,15 @@
 </div>
 
 <!-- top right close button -->
-<button id="close-playfield" class="btn-transparent btn-top-right" type="button" aria-label="Close" onclick="vpw.loader.reset()">
+<button id="close-playfield" class="btn-transparent btn-top-right d-none" type="button" aria-label="Close" onclick="vpw.loader.reset()">
 	<span aria-hidden="true">&times;</span>
 </button>
 
-<!-- pause button -->
-<button id="pause-playfield" class="btn-transparent btn-bottom-right btn-pause d-block" type="button" aria-label="Pause" onclick="vpw.loader.pause()">
+<!-- pause / resume buttons -->
+<button id="pause-player" class="btn-transparent btn-bottom-right btn-pause d-none" type="button" aria-label="Pause" onclick="vpw.controller.pause()">
 	<%= require('./images/pause_circle_filled.svg')%>
 </button>
-<button id="pause-playfield" class="btn-transparent btn-bottom-right btn-pause d-none" type="button" aria-label="Resume" onclick="vpw.loader.resume()">
+<button id="resume-player" class="btn-transparent btn-bottom-right btn-pause d-none" type="button" aria-label="Resume" onclick="vpw.controller.resume()">
 	<%= require('./images/play_circle_filled.svg')%>
 </button>
 

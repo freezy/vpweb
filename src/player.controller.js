@@ -46,6 +46,9 @@ export class PlayerController {
 		this.worker.onmessage = this._onMessage.bind(this);
 		this.playfieldLights = [];
 
+		this.pauseElement = document.getElementById('pause-player');
+		this.resumeElement = document.getElementById('resume-player');
+
 		// gui
 		this.renderController = {
 			'opacity': 1,
@@ -148,7 +151,20 @@ export class PlayerController {
 				this._showEmuUI();
 				break;
 			}
-
+			case 'started': {
+				this.pauseElement.classList.remove('d-none');
+				break;
+			}
+			case 'paused': {
+				this.pauseElement.classList.add('d-none');
+				this.resumeElement.classList.remove('d-none');
+				break;
+			}
+			case 'resumed': {
+				this.pauseElement.classList.remove('d-none');
+				this.resumeElement.classList.add('d-none');
+				break;
+			}
 			case 'progressStart': {
 				this.progressModal.start(e.data.id, e.data.title, true);
 				break;
@@ -204,6 +220,14 @@ export class PlayerController {
 		delete this.tableItems[ball.getName()];
 		ball.removeFromScene(this.scene, this.renderApi);
 		this.ballName = undefined;
+	}
+
+	pause() {
+		this.worker.postMessage({ event: 'pause' });
+	}
+
+	resume() {
+		this.worker.postMessage({ event: 'resume' });
 	}
 
 	onFrame() {

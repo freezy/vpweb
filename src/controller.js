@@ -9,33 +9,50 @@ export class Controller {
 	}
 
 	setCabinetInput(key) {
-		if (!this.renderer.player) {
+		if (!this._setup()) {
 			return;
 		}
 		this.renderer.player.setCabinetInput(key);
 	}
 
 	setInput(key) {
-		if (!this.renderer.player) {
+		if (!this._setup()) {
 			return;
 		}
 		this.renderer.player.setSwitchInput(key);
 	}
 
 	key(event) {
-		if (!this.renderer.player) {
+		if (!this._setup()) {
 			return true;
-		}
-		if (!this.physics) {
-			this.physics = this.renderer.player;
 		}
 
 		const down = event.type === 'keydown';
 		if (down) {
-			this.physics.keyDown(event);
+			this.playerController.keyDown(event);
 		} else {
-			this.physics.keyUp(event);
+			this.playerController.keyUp(event);
 		}
 		return false;
+	}
+
+	pause() {
+		this._setup();
+		this.playerController.pause();
+	}
+
+	resume() {
+		this._setup();
+		this.playerController.resume();
+	}
+
+	_setup() {
+		if (!this.renderer.player) {
+			return false;
+		}
+		if (!this.playerController) {
+			this.playerController = this.renderer.player;
+		}
+		return true;
 	}
 }
