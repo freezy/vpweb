@@ -15,11 +15,8 @@ module.exports = opts => {
 
 			new webpack.DefinePlugin({
 				PRODUCTION: !opts.devMode,
-			}),
-
-			new webpack.DefinePlugin({
 				VPXJS_RELEASE_VERSION: JSON.stringify(
-				  require('../node_modules/vpx-js/package.json').version
+					require('../node_modules/vpx-js/package.json').version
 				),
 			  }),
 
