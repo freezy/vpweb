@@ -1,4 +1,5 @@
 const { resolve } = require('path');
+const childProcess = require('child_process');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
@@ -15,7 +16,11 @@ module.exports = opts => {
 
 			new webpack.DefinePlugin({
 				PRODUCTION: !opts.devMode,
-				VPXJS_RELEASE_VERSION: JSON.stringify(
+				'global.VPWEB_BUILD_TIMESTAMP': Date.now(),
+				'global.VPWEB_VERSION': JSON.stringify(
+					require('../package.json').version + '-' + childProcess.execSync('git rev-parse --short HEAD').toString().trim()
+				),
+				'global.VPXJS_VERSION': JSON.stringify(
 					require('../node_modules/vpx-js/package.json').version
 				),
 			  }),
