@@ -17,6 +17,12 @@ module.exports = opts => {
 				PRODUCTION: !opts.devMode,
 			}),
 
+			new webpack.DefinePlugin({
+				VPXJS_RELEASE_VERSION: JSON.stringify(
+				  require('../node_modules/vpx-js/package.json').version
+				),
+			  }),
+
 			new HtmlWebpackPlugin({
 				template: 'src/index.ejs',
 				minify: !opts.devMode,
