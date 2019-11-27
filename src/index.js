@@ -8,15 +8,9 @@ const cache = new FileCache();
 const loader = new Loader(cache);
 
 const vpWebBuildTime = timeago.format(global.VPWEB_BUILD_TIMESTAMP);
-console.log('VPWEB BUILD was', vpWebBuildTime);
-
+document.getElementById('vpx-version-details').title = 'VPWEB v' + global.VPWEB_VERSION + ', built ' + vpWebBuildTime + '\nVPX-JS v' + global.VPXJS_VERSION;
 
 window.vpw = { loader };
-window.build = {
-	vpWebBuildTime,
-	vpWebVersion: global.VPWEB_VERSION,
-	vpxJsVersion: global.VPXJS_VERSION,
-}
 
 cache.init()
 	.then(() => cache.get())
