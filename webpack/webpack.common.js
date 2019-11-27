@@ -6,6 +6,7 @@ const WebpackPwaManifest = require('webpack-pwa-manifest');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const Critters = require('critters-webpack-plugin');
+const VpxJsFile = require('../node_modules/vpx-js/dist/build.json');
 
 module.exports = opts => {
 	return {
@@ -21,7 +22,10 @@ module.exports = opts => {
 					require('../package.json').version + '-' + childProcess.execSync('git rev-parse --short HEAD').toString().trim()
 				),
 				'global.VPXJS_VERSION': JSON.stringify(
-					require('../node_modules/vpx-js/package.json').version
+					VpxJsFile.version
+				),
+				'global.VPXJS_BUILD_TIMESTAMP': JSON.stringify(
+					VpxJsFile.timestamp
 				),
 			  }),
 
