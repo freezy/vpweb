@@ -27,6 +27,12 @@ module.exports = opts => {
 				'global.VPXJS_BUILD_TIMESTAMP': JSON.stringify(
 					VpxJsFile.timestamp
 				),
+				'global.VPXJS_GIT_BRANCH': JSON.stringify(
+					VpxJsFile.gitBranch
+				),
+				'global.VPXJS_GIT_HASH': JSON.stringify(
+					VpxJsFile.gitHash
+				),
 			  }),
 
 			new HtmlWebpackPlugin({
