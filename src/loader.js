@@ -65,6 +65,13 @@ export class Loader {
 		});
 	}
 
+	downloadTable(event) {
+		const url = event.toElement.getAttribute('data-table');
+		fetch(url)
+			.then(res => res.blob())
+			.then(blob => this.loadBlob(blob));
+	}
+
 	/**
 	 * Creates a parsed table object from an uploaded .vpx.
 	 *
