@@ -48,6 +48,10 @@ class PlayerWorker {
 		this._player.on('emuStarted', () => postMessage({event: 'emuStarted'}));
 		this._player.on('paused', () => postMessage({event: 'paused'}));
 		this._player.on('resumed', () => postMessage({event: 'resumed'}));
+		this._player.on('playSound', params => postMessage({event: 'playSound', params }));
+		this._player.on('stopSound', params => postMessage({event: 'stopSound', params }));
+		this._player.on('playMusic', params => postMessage({event: 'playMusic', params }));
+		this._player.on('endMusic', params => postMessage({event: 'endMusic', params }));
 		this._player.init(self.vpw.scope);
 		this._looping = true;
 

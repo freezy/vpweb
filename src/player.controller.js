@@ -60,11 +60,12 @@ export class PlayerController {
 		//this._initGUI();
 	}
 
-	init(table, renderer) {
+	init(table, renderer, soundAdapter) {
 
 		this.table = table;
 		this.renderer = renderer;
 		this.scene = renderer.scene;
+		this.soundAdapter = soundAdapter;
 
 		// index scene items
 		const playfield = this.scene.children.find(c => c.name === 'playfield');
@@ -171,6 +172,22 @@ export class PlayerController {
 				this.resumeElement.classList.add('d-none');
 				break;
 			}
+			case 'playSound': {
+				this.soundAdapter.playSound(e.data.params);
+				break;
+			}
+			case 'stopSound': {
+				this.soundAdapter.stopSound(e.data.params);
+				break;
+			}
+			// case 'playMusic': {
+			// 	this.audioAdapter.playMusic(e.data.params);
+			// 	break;
+			// }
+			// case 'endMusic': {
+			// 	this.audioAdapter.endMusic(e.data.params);
+			// 	break;
+			// }
 			case 'progressStart': {
 				this.progressModal.start(e.data.id, e.data.title, true);
 				break;

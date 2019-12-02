@@ -1,4 +1,12 @@
-import { BrowserBinaryReader, Progress, progress, Table, ThreeRenderApi, ThreeTextureLoader } from 'vpx-js';
+import {
+	BrowserBinaryReader,
+	Progress,
+	progress,
+	SoundAdapter,
+	Table,
+	ThreeRenderApi,
+	ThreeTextureLoader
+} from 'vpx-js';
 import { Renderer } from './renderer';
 import { PlayerController } from './player.controller';
 import { Controller } from './controller';
@@ -42,8 +50,12 @@ export class Loader {
 		const playfield = await this._generatePlayfield(table);
 		this._setupRenderer(playfield);
 
+		// setup audio
+		const soundAdapter = new SoundAdapter();
+		await table.setupAudio(soundAdapter);
+
 		// start player
-		this.player.init(table, this.renderer);
+		this.player.init(table, this.renderer, soundAdapter);
 		this.renderer.setPlayer(this.player);
 		progress().end('table.playfield');
 
