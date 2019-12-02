@@ -23,7 +23,7 @@
 	"author": "freezy@vpdb.io",
 	"license": "GPL-2.0",
 	"dependencies": {
-		"bootstrap": "4.3.1",
+		"bootstrap": "4.4.1",
 		"three": "0.110.0",
 		"vpx-js": "1.2.5"
 	},
