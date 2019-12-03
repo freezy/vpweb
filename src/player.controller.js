@@ -96,6 +96,12 @@ export class PlayerController {
 		this.messageQueue = [];
 		this.worker.terminate();
 		this._hideEmuUI();
+		if (!this.pauseElement.classList.contains('d-none')) {
+			this.pauseElement.classList.add('d-none');
+		}
+		if (!this.resumeElement.classList.contains('d-none')) {
+			this.resumeElement.classList.add('d-none');
+		}
 		delete window.vpw.sceneItems;
 		delete window.vpw.tableItems;
 		delete window.vpw.items;
