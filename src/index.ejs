@@ -96,7 +96,10 @@
 					style="background-image: url(<%= require('./images/mm-playfield.png')%>)"></div>
 			</div>
 			<div class="col-md p-5 p-md-3 p-lg-4 p-xl-5">
-				<div class="round-box round-box-clickable ar-1-1" style="background-image: url(<%= require('./images/mm-playfield.png')%>)"></div>
+				<div class="round-box round-box-clickable ar-1-1"
+					 data-table="<%= require('./tables/blank-table.vpx')%>"
+					 onclick="vpw.loader.downloadTable(event)"
+					 style="background-image: url(<%= require('./images/blank-table.png')%>)"></div>
 			</div>
 			<div class="col-md p-5 p-md-3 p-lg-4 p-xl-5">
 				<!-- drop zone -->

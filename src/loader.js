@@ -69,6 +69,7 @@ export class Loader {
 		const url = event.toElement.getAttribute('data-table');
 		fetch(url)
 			.then(res => res.blob())
+			.then(blob => this.cache.save(blob))
 			.then(blob => this.loadBlob(blob));
 	}
 
