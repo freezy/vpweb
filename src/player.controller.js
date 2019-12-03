@@ -173,11 +173,19 @@ export class PlayerController {
 				break;
 			}
 			case 'playSound': {
-				this.soundAdapter.playSound(e.data.params);
+				if (this.messageQueue) {
+					this.messageQueue.push([ 'playSound', e.data.params ]);
+				} else {
+					this.soundAdapter.playSound(e.data.params);
+				}
 				break;
 			}
 			case 'stopSound': {
-				this.soundAdapter.stopSound(e.data.params);
+				if (this.messageQueue) {
+					this.messageQueue.push([ 'stopSound', e.data.params ]);
+				} else {
+					this.soundAdapter.stopSound(e.data.params);
+				}
 				break;
 			}
 			// case 'playMusic': {
@@ -218,6 +226,12 @@ export class PlayerController {
 					break;
 				case 'destroyBall':
 					this._destroyBall(msg[1]);
+					break;
+				case 'playSound':
+					this.soundAdapter.playSound(msg[1]);
+					break;
+				case 'stopSound':
+					this.soundAdapter.stopSound(msg[1]);
 					break;
 			}
 		}

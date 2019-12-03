@@ -2,7 +2,6 @@ import {
 	BrowserBinaryReader,
 	Progress,
 	progress,
-	SoundAdapter,
 	Table,
 	ThreeRenderApi,
 	ThreeTextureLoader
@@ -11,6 +10,7 @@ import { Renderer } from './renderer';
 import { PlayerController } from './player.controller';
 import { Controller } from './controller';
 import { ProgressModal } from './progress';
+import { HowlerSoundAdapter } from 'vpx-js/dist/esm/lib/audio/howler/howler-adapter';
 
 export class Loader {
 
@@ -51,7 +51,7 @@ export class Loader {
 		this._setupRenderer(playfield);
 
 		// setup audio
-		const soundAdapter = new SoundAdapter();
+		const soundAdapter = new HowlerSoundAdapter();
 		await table.setupAudio(soundAdapter);
 
 		// start player
