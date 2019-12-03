@@ -33,7 +33,7 @@
 	</script>
 	<script type="text/javascript">var _paq = window._paq || []; _paq.push(['trackPageView']); _paq.push(['enableLinkTracking']); _paq.push(['enableHeartBeatTimer', 30]); (function() { if (!PRODUCTION) return; var u = "//count.vpdb.io/"; _paq.push(['setTrackerUrl', u + 'matomo.php']); _paq.push(['setSiteId', '1']);var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];g.type = 'text/javascript';g.async = true;g.defer = true;g.src = u + 'matomo.js';s.parentNode.insertBefore(g, s);})();</script>
 </head>
-<body onkeydown="key(event)" onkeyup="key(event)">
+<body class="init" onkeydown="key(event)" onkeyup="key(event)">
 
 <!-- button data-table="<%= require('./tables/mm-playfield.vpx')%>" onclick="vpw.loader.downloadTable(event)">Download locally</button-->
 
@@ -70,11 +70,49 @@
 	<%= require('./images/play_circle_filled.svg')%>
 </button>
 
-<!-- initial drop zone -->
-<div id="vpx-drop">
-	<div class="modal-guts text-center" ondrop="vpw.loader.dropHandler(event)" ondragenter="vpw.loader.dragEnterHandler(event)" ondragleave="vpw.loader.dragLeaveHandler(event)" ondragover="vpw.loader.dragOverHandler(event)">
-		<h1 class="display-4 mt-4">Drag VPX here</h1>
-		<p class="lead mt-3">(it's not uploaded anywhere)</p>
+<div class="fixed-top text-center">
+	<div class="container">
+		<div class="row">
+			<div class="offset-lg-2 col-lg-8">
+				<h1 class="pt-5">VPX-JS</h1>
+				<p>This is a simple demo site for <a href="https://github.com/vpdb/vpx-js" _target="blank">VPX-JS</a>.
+					The tables below are for you to test. They only contain features that have been implemented, and you should not
+					get any issues with them. If you do, <a href="https://github.com/vpdb/vpx-js/issues">report them!</a>.
+				</p>
+				<p>
+					You can also drag and drop your own VPX files. We don't recommend that at the moment, because this is still in
+					development. Speaking of, this site is updated automatically when code is merged to master. You might
+					need to refresh with CTRL+SHIFT+R, because it's a PWA.
+				</p>
+				<p>
+					Enjoy!
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="vertical-center">
+	<div class="container">
+		<div class="row">
+			<div class="col-md p-5">
+				<div class="round-box round-box-clickable ar-1-1" style="background-image: url(<%= require('./images/mm-playfield.png')%>)"></div>
+			</div>
+			<div class="col-md p-5">
+				<div class="round-box round-box-clickable ar-1-1" style="background-image: url(<%= require('./images/mm-playfield.png')%>)"></div>
+			</div>
+			<div class="col-md p-5">
+				<!-- drop zone -->
+				<div id="vpx-drop" class="round-box round-box-dotted ar-1-1">
+					<div class="text-center" ondrop="vpw.loader.dropHandler(event)" ondragenter="vpw.loader.dragEnterHandler(event)" ondragleave="vpw.loader.dragLeaveHandler(event)" ondragover="vpw.loader.dragOverHandler(event)">
+						<div class="p-3">
+							<h4>Drag your own VPX</h4>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
 	</div>
 </div>
 

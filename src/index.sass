@@ -1,5 +1,6 @@
 // bootstrap
-$theme-colors: ("primary": #C23E00)
+$theme-colors: ("primary": #ff5000)
+$body-color: #878787
 
 @import "~bootstrap/scss/_functions.scss"
 @import "~bootstrap/scss/_variables.scss"
@@ -47,6 +48,14 @@ body
 	margin: 0
 	background-color: #333
 	position: relative
+	&.init
+		background-image: url("images/broken_noise.png")
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi)
+	body.init
+		background-image: url('images/broken_noise_@2X.png')
+		background-size: 476px 476px
+
 canvas
 	display: block
 
@@ -56,22 +65,6 @@ canvas#dmd
 	left: 82px
 	background-color: #151515
 	display: none
-
-div#vpx-drop
-	border-radius: 4.8px
-	color: #999
-	background-color: #262626
-	width: 450px
-	max-width: 100%
-	height: 250px
-	max-height: 100%
-	position: fixed
-	left: 50%
-	top: 50%
-	transform: translate(-50%, -50%)
-
-	&.drop-hover
-		background-color: #202020
 
 div#vpx-version
 	top: 0
@@ -116,4 +109,52 @@ div#vpx-version
 .btn.btn-w1
 	width: 50px
 
+.vertical-center
+	min-height: 100vh
+	display: flex
+	align-items: center
 
+.ar-1-1
+	height: auto
+	position: relative
+	text-align: center
+	padding: 100% 0 0
+	border-radius: 50%
+
+.round-box
+	transition: .2s
+	background-position: center
+	background-size: 75%
+	background-repeat: no-repeat
+	border: 3px solid #878787
+	position: relative
+	background-color: rgba(0, 0, 0, 0.2)
+	&:before
+		transition: .2s
+		position: absolute
+		content: ''
+		border: 1px solid #a0a0a0
+		width: 110%
+		height: 110%
+		transform: translate(-50%, -95.5%)
+		border-radius: 50%
+	&.round-box-dotted
+		border-style: dotted
+		&:before
+			border-style: dashed
+
+	&.round-box-clickable
+		cursor: pointer
+		&:hover
+			box-shadow: 0 0 100px -10px rgba(255, 80, 0, 0.1)
+			border-color: #ff5000
+			&:before
+				border-color: #ff5000
+				background-color: rgba(255, 80, 0, 0.04)
+
+	div
+		position: absolute
+		top: 50%
+		left: 0
+		width: 100%
+		transform: translateY(-50%)
