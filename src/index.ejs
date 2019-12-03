@@ -35,8 +35,6 @@
 </head>
 <body class="init" onkeydown="key(event)" onkeyup="key(event)">
 
-<!-- button data-table="<%= require('./tables/mm-playfield.vpx')%>" onclick="vpw.loader.downloadTable(event)">Download locally</button-->
-
 <!-- dmd -->
 <canvas id="dmd" width="390" height="102"></canvas>
 
@@ -70,7 +68,7 @@
 	<%= require('./images/play_circle_filled.svg')%>
 </button>
 
-<div class="text-center">
+<div id="home" class="text-center">
 	<div class="container">
 		<div class="row">
 			<div class="offset-lg-2 col-lg-8">
@@ -91,7 +89,11 @@
 		</div>
 		<div class="row">
 			<div class="col-md p-5 p-md-3 p-lg-4 p-xl-5">
-				<div class="round-box round-box-clickable ar-1-1" style="background-image: url(<%= require('./images/mm-playfield.png')%>)"></div>
+				<div
+					class="round-box round-box-clickable ar-1-1"
+					data-table="<%= require('./tables/mm-playfield.vpx')%>"
+					onclick="vpw.loader.downloadTable(event)"
+					style="background-image: url(<%= require('./images/mm-playfield.png')%>)"></div>
 			</div>
 			<div class="col-md p-5 p-md-3 p-lg-4 p-xl-5">
 				<div class="round-box round-box-clickable ar-1-1" style="background-image: url(<%= require('./images/mm-playfield.png')%>)"></div>
