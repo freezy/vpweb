@@ -109,11 +109,6 @@ div#vpx-version
 .btn.btn-w1
 	width: 50px
 
-.vertical-center
-	min-height: 100vh
-	display: flex
-	align-items: center
-
 .ar-1-1
 	height: auto
 	position: relative
@@ -121,6 +116,12 @@ div#vpx-version
 	padding: 100% 0 0
 	border-radius: 50%
 
+@mixin round-box-active
+	box-shadow: 0 0 100px -10px rgba(255, 80, 0, 0.1)
+	border-color: #ff5000
+	&:before
+		border-color: #ff5000
+		background-color: rgba(255, 80, 0, 0.04)
 .round-box
 	transition: .2s
 	background-position: center
@@ -140,17 +141,18 @@ div#vpx-version
 		border-radius: 50%
 	&.round-box-dotted
 		border-style: dotted
+		*
+			pointer-events: none
 		&:before
 			border-style: dashed
 
 	&.round-box-clickable
 		cursor: pointer
 		&:hover
-			box-shadow: 0 0 100px -10px rgba(255, 80, 0, 0.1)
-			border-color: #ff5000
-			&:before
-				border-color: #ff5000
-				background-color: rgba(255, 80, 0, 0.04)
+			@include round-box-active
+
+	&.drop-hover
+		@include round-box-active
 
 	div
 		position: absolute
