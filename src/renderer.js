@@ -16,13 +16,13 @@ export class Renderer {
 		this._initControls();
 		this._initLights();
 		this._resetCamera();
-		document.getElementById('vpx-drop').classList.add('d-none');
+		document.getElementById('home').classList.add('d-none');
 		document.getElementById('close-playfield').classList.remove('d-none');
 	}
 
 	reset() {
 		cancelAnimationFrame(this.animationFrame);
-		document.getElementById('vpx-drop').classList.remove('d-none');
+		document.getElementById('home').classList.remove('d-none');
 		document.getElementById('close-playfield').classList.add('d-none');
 		document.body.removeChild(this.renderer.domElement);
 		document.body.removeChild(this.renderStats.dom);
