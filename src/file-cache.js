@@ -15,13 +15,14 @@ export class FileCache {
 	/**
 	 * Saves the table to the cache.
 	 * @param {Blob} blob
-	 * @return {Promise<void>}
+	 * @return {Promise<Blob>}
 	 */
 	async save(blob) {
 		if (!this.isAvailable) {
 			return Promise.resolve();
 		}
 		await this.cache.put(this.key, new Response(blob));
+		return blob;
 	}
 
 	/**
