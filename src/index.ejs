@@ -70,14 +70,14 @@
 	<%= require('./images/play_circle_filled.svg')%>
 </button>
 
-<div class="fixed-top text-center">
+<div class="text-center">
 	<div class="container">
 		<div class="row">
 			<div class="offset-lg-2 col-lg-8">
 				<h1 class="pt-5">VPX-JS</h1>
 				<p>This is a simple demo site for <a href="https://github.com/vpdb/vpx-js" _target="blank">VPX-JS</a>.
 					The tables below are for you to test. They only contain features that have been implemented, and you should not
-					get any issues with them. If you do, <a href="https://github.com/vpdb/vpx-js/issues">report them!</a>.
+					get any issues with them, but if you do, please <a href="https://github.com/vpdb/vpx-js/issues">report them!</a>.
 				</p>
 				<p>
 					You can also drag and drop your own VPX files. We don't recommend that at the moment, because this is still in
@@ -89,22 +89,17 @@
 				</p>
 			</div>
 		</div>
-	</div>
-</div>
-
-<div class="vertical-center">
-	<div class="container">
 		<div class="row">
-			<div class="col-md p-5">
+			<div class="col-md p-5 p-md-3 p-lg-4 p-xl-5">
 				<div class="round-box round-box-clickable ar-1-1" style="background-image: url(<%= require('./images/mm-playfield.png')%>)"></div>
 			</div>
-			<div class="col-md p-5">
+			<div class="col-md p-5 p-md-3 p-lg-4 p-xl-5">
 				<div class="round-box round-box-clickable ar-1-1" style="background-image: url(<%= require('./images/mm-playfield.png')%>)"></div>
 			</div>
-			<div class="col-md p-5">
+			<div class="col-md p-5 p-md-3 p-lg-4 p-xl-5">
 				<!-- drop zone -->
-				<div id="vpx-drop" class="round-box round-box-dotted ar-1-1">
-					<div class="text-center" ondrop="vpw.loader.dropHandler(event)" ondragenter="vpw.loader.dragEnterHandler(event)" ondragleave="vpw.loader.dragLeaveHandler(event)" ondragover="vpw.loader.dragOverHandler(event)">
+				<div id="vpx-drop" class="round-box round-box-dotted ar-1-1"  ondrop="vpw.loader.dropHandler(event)" ondragenter="vpw.loader.dragEnterHandler(event)" ondragleave="vpw.loader.dragLeaveHandler(event)" ondragover="vpw.loader.dragOverHandler(event)">
+					<div class="text-center">
 						<div class="p-3">
 							<h4>Drag your own VPX</h4>
 						</div>
