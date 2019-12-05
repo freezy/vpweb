@@ -74,7 +74,7 @@ module.exports = opts => {
 		module: {
 			rules: [
 				{
-					test: /\.vbs$/i,
+					test: /\.(vbs|bnf)$/i,
 					use: 'raw-loader',
 				},
 				{
