@@ -52,7 +52,10 @@ export class Loader {
 
 		// setup audio
 		const soundAdapter = new HowlerSoundAdapter();
-		await table.setupAudio(soundAdapter);
+		await table.setupAudio(soundAdapter)
+			.catch((error) => {
+				console.error('AUDIO ERROR:', error.message);
+			});
 
 		// start player
 		this.player.init(table, this.renderer, soundAdapter);
