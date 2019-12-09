@@ -127,7 +127,7 @@ export class PlayerController {
 		}
 
 		// physics loop cycles count
-		if (e.data.cpf) {
+		if (e.data.cpf || e.data.cpf === 0) {
 			if (this.renderer) {
 				this.renderer._updateCps(e.data.cpf);
 			}
@@ -190,7 +190,7 @@ export class PlayerController {
 			}
 
 			default:
-				console.warn('Unhandled command:', e.data.event);
+				console.warn('Unhandled command:', e.data);
 		}
 	}
 
