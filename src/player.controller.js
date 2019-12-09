@@ -131,6 +131,7 @@ export class PlayerController {
 			if (this.renderer) {
 				this.renderer._updateCps(e.data.cpf);
 			}
+			return;
 		}
 
 		// ball events
@@ -187,6 +188,9 @@ export class PlayerController {
 				this.progressModal.details(e.data.details, true);
 				break;
 			}
+
+			default:
+				console.warn('Unhandled command:', e.data.event);
 		}
 	}
 
