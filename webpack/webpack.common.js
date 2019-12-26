@@ -94,9 +94,15 @@ module.exports = opts => {
 					],
 				},
 				{
-					test: /\.(eot|woff|woff2|ttf|otf|png|jpg|swf|hdr|exr|vpx)$/,
-					use: { loader: 'file-loader', options: {name: '[path][name]-[sha256:hash:base58:8].[ext]'} },
-				}, {
+					test: /\.(eot|woff2?|ttf|otf|png|jpe?g|swf|hdr|exr|vpx)$/i,
+					use: {
+						loader: 'file-loader',
+						options: {
+							name: '[path][name]-[sha256:hash:base58:8].[ext]',
+							esModule: false
+						} },
+				},
+				{
 					test: /\.ejs$/,
 					use: 'ejs-loader',
 				},
