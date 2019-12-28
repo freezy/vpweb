@@ -103,10 +103,16 @@
 			</div>
 			<div class="col-md p-5 p-md-3 p-lg-4 p-xl-5">
 				<!-- drop zone -->
-				<div id="vpx-drop" class="round-box round-box-dotted ar-1-1"  ondrop="vpw.loader.dropHandler(event)" ondragenter="vpw.loader.dragEnterHandler(event)" ondragleave="vpw.loader.dragLeaveHandler(event)" ondragover="vpw.loader.dragOverHandler(event)">
+				<div id	="vpx-drop" class="round-box round-box-dotted ar-1-1"
+					ondrop="vpw.loader.dropHandler(event)"
+					ondragenter="vpw.loader.dragEnterHandler(event)"
+					ondragleave="vpw.loader.dragLeaveHandler(event)"
+					ondragover="vpw.loader.dragOverHandler(event)">
 					<div class="text-center">
 						<div class="p-3">
 							<h4>Drag your own VPX</h4>
+							<label class="button" for="vpx-upload">Choose your own VPX</label>
+							<input id="vpx-upload" type="file" accept=".vpx, .vpt" onchange="vpw.loader.handleFiles(this.files)">
 						</div>
 					</div>
 				</div>
