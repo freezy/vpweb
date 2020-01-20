@@ -149,8 +149,6 @@ div#vpx-version
 		border-radius: 50%
 	&.round-box-dotted
 		border-style: dotted
-		*
-			pointer-events: none
 		&:before
 			border-style: dashed
 
@@ -162,9 +160,24 @@ div#vpx-version
 	&.drop-hover
 		@include round-box-active
 
-	div
+	>div
 		position: absolute
 		top: 50%
 		left: 0
 		width: 100%
 		transform: translateY(-50%)
+
+.button
+	display: inline-block
+	padding: 10px
+	background: #ccc
+	color: #222
+	cursor: pointer
+	border-radius: 5px
+	border: 1px solid #ccc
+
+.button:hover
+	background: #ddd
+
+#vpx-upload
+	display: none

@@ -126,27 +126,24 @@ export class Loader {
 		this.renderer.setPlayfield(playfield);
 	}
 
+	handleFiles(files) {
+		for (const file of files) {
+			this.cache.save(file).then(() => this.loadBlob(file));
+			// we only need one file
+			break;
+		}
+	}
+
 	dropHandler(ev) {
 		console.log('File(s) dropped', ev);
 
 		if (ev.dataTransfer.items) {
 			// Use DataTransferItemList interface to access the file(s)
-			for (const item of ev.dataTransfer.items) {
-				// If dropped items aren't files, reject them
-				if (item.kind === 'file') {
-					const file = item.getAsFile();
-					this.cache.save(file).then(() => this.loadBlob(file));
-
-					// we only need one file
-					break;
-				}
-			}
+			const files = [...ev.dataTransfer.items].map(item => item.getAsFile());
+			this.handleFiles(files);
 		} else {
 			// Use DataTransfer interface to access the file(s)
-			for (const file of ev.dataTransfer.files) {
-				this.cache.save(file).then(() => this.loadBlob(file));
-				break;
-			}
+			this.handleFiles(ev.dataTransfer.files);
 		}
 		this.dropzone.classList.remove('drop-hover');
 		ev.preventDefault();
