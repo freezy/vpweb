@@ -34,7 +34,7 @@
 		"cross-env": "6.0.3",
 		"css-loader": "3.4.2",
 		"ejs-loader": "0.3.5",
-		"escodegen": "1.12.1",
+		"escodegen": "1.14.3",
 		"estraverse": "4.3.0",
 		"file-loader": "5.0.2",
 		"html-webpack-plugin": "3.2.0",
