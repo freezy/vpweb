@@ -66,7 +66,7 @@ export class Loader {
 	}
 
 	downloadTable(event) {
-		const url = event.toElement.getAttribute('data-table');
+		const url = event.target.getAttribute('data-table');
 		fetch(url)
 			.then(res => res.blob())
 			.then(blob => this.cache.save(blob))
